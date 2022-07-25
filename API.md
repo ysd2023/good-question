@@ -21,7 +21,7 @@
 
 ##### 1.3 响应数据（`json`）
 
-```json
+```
 {
     page: Number //当前请求返回的页数
     questionList: Array<Object> //问题列表
@@ -30,7 +30,7 @@
 
 *补充解释：question是`questionList`里面的对象*
 
-```json
+```
 question {
     title: String //问题的标题
     summary: String //对问题的简单描述，可选
@@ -46,7 +46,7 @@ publisher {
 
 ##### 1.4 请求数据（`type[ formData | json ]`）
 
-```json
+```
 {}
 ```
 
@@ -70,7 +70,7 @@ publisher {
 
 ##### 2.3 响应数据（`json`）
 
-```json
+```
 {
     publisher: Object //发布者相关信息
     question: Object //问题的相关信息
@@ -80,7 +80,7 @@ publisher {
 
 *补充解释：*
 
-```json
+```
 publisher {
     nickName: String //发布者昵称
     avatar: image[url] //发布者头像链接
@@ -95,7 +95,7 @@ question {
 
 ##### 2.4 请求数据（`type[ formData | json ]`）
 
-```json
+```
 {}
 ```
 
@@ -119,7 +119,7 @@ question {
 
 ##### 3.3 响应数据（`json`)
 
-```json
+```
 {
     solutionList: Array<{
         resolver: Object //提出解决方案的用户信息
@@ -131,7 +131,7 @@ question {
 
 *补充解释：*
 
-```json
+```
 resolver {
     nickName: String //解决问题用户名字
     avatar: image[url] //解决问题用户头像链接
@@ -150,7 +150,7 @@ citeSolution {
 
 ##### 3.4 请求数据（`type[ formData | json ]`）
 
-```json
+```
 {}
 ```
 
@@ -174,7 +174,7 @@ citeSolution {
 
 ##### 4.3 响应数据（`json`）
 
-```json
+```
 {
     commentorList: Array<{
         commentor: Object //评论者相关信息
@@ -186,7 +186,7 @@ citeSolution {
 
 *补充解释：*
 
-```json
+```
 commentor {
     nickName: String //评论者昵称
     avatar: image[url] //评论者头像链接
@@ -195,7 +195,7 @@ commentor {
 
 ##### 4.4 请求数据（`type[ formData | json ]`）
 
-```json
+```
 {}
 ```
 
@@ -219,7 +219,7 @@ commentor {
 
 ##### 5.3 响应数据（`json`）
 
-```json
+```
 {
     statu: Boolean //发布状态
     reason: String //理由
@@ -228,7 +228,7 @@ commentor {
 
 ##### 5.4 请求数据（`json`）
 
-```json
+```
 {
     citeSolutionID: [pending] //被引用的解决方案的id,可选，空则表示无引用
     content: String //解决方案内容
@@ -255,7 +255,7 @@ commentor {
 
 ##### 6.3 响应数据（`json`）
 
-```json
+```
 {
     errno: 0, // PS: 值是数字，成功为0，失败为非0
     data: {
@@ -268,7 +268,7 @@ commentor {
 
 ##### 6.4 请求数据（`formData`）
 
-```json
+```
 {
     wangeditor-uploaded-image: File
 }
@@ -301,7 +301,7 @@ commentor {
 
 ##### 8.3 响应数据（`json`）
 
-```json
+```
 {
     statu: Boolean //评论发表状态
     reason: String //失败理由
@@ -310,7 +310,7 @@ commentor {
 
 ##### 8.4 请求数据（`json`）
 
-```json
+```
 {
     content: String //评论内容
 }
@@ -337,7 +337,7 @@ commentor {
 
 ##### 9.3 响应数据(`json`)
 
-```json
+```
 {
     statu: Boolean //表态请求状态
     reason: String //失败理由
@@ -346,7 +346,7 @@ commentor {
 
 ##### 9.4 请求数据
 
-```json
+```
 {
     attitude: Boolean //态度。true: 赞成; false: 反对. 
 }
@@ -378,7 +378,7 @@ commentor {
 
 ##### 1.3 响应数据(`json`)
 
-```json
+```
 {
     statu: Boolean //问题发布状态
     reason: String //发布失败理由
@@ -387,7 +387,7 @@ commentor {
 
 ##### 1.4 请求数据（`json`)
 
-```json
+```
 {
     title: String //问题的主要标题
     content: String //问题的主要描述
@@ -420,7 +420,7 @@ commentor {
 
 ##### 1.3 响应数据（`json`）
 
-```json
+```
 {
     nickName: String //用户昵称
     avatar: image[url] //用户头像链接
@@ -450,7 +450,7 @@ commentor {
 
 ##### 2.3 响应数据(`json`)
 
-```json
+```
 {
     likes: Number //获赞总数
     questions: Number //提出问题总数
@@ -480,7 +480,7 @@ commentor {
 
 ##### 3.3 请求数据（`formData`）
 
-```json
+```
 {
     avatar: File | null // 用户头像文件，null则表示不修改
     nickName: String | null // 用户昵称，null表示不修改
@@ -489,7 +489,7 @@ commentor {
 
 ##### 3.4 响应数据(`json`)
 
-```json
+```
 {
     statu: Boolean //修改请求状态，true: 成功; false: 失败;
     reason: String //失败理由
@@ -514,7 +514,7 @@ commentor {
 
 ##### 4.3 响应数据(`json`)
 
-```json
+```
 {
     questionList: Array<{
         title: String //问题的标题
@@ -529,7 +529,7 @@ commentor {
 
 ##### 4.4 请求数据（`type [ formData | json]`）
 
-```json
+```
 {}
 ```
 
@@ -553,7 +553,7 @@ commentor {
 
 ##### 4.3 响应数据(`json`)
 
-```json
+```
 {
     solutionList: Array<{
         title: String //问题的标题
@@ -567,7 +567,7 @@ commentor {
 
 ##### 4.4 请求数据（`type [ formData | json]`）
 
-```json
+```
 {}
 ```
 
@@ -597,7 +597,7 @@ commentor {
 
 ##### 1.3 响应数据(`json`)
 
-```json
+```
 {
     statu: Boolean //请求响应状态，true: 成功; false: 失败
     reason: String //失败原因
@@ -606,7 +606,7 @@ commentor {
 
 ##### 1.4 请求数据 (`json`)
 
-```json
+```
 {
     account: String //用户账号
     password: String //用户密码
@@ -631,7 +631,7 @@ commentor {
 
 ##### 2.3 响应数据(`json`)
 
-```json
+```
 {
     statu: Boolean //验证状态，true: 已登录; false: 未登录|登录过期
     reason: String //失败理由
@@ -660,7 +660,7 @@ commentor {
 
 ##### 3.3 响应数据（`json`）
 
-```json
+```
 {
     statu: Boolean //注册请求状态，true: 成功; false: 失败;
     reason: String //失败理由
@@ -669,7 +669,7 @@ commentor {
 
 ##### 3.4 请求数据(`json`)
 
-```json
+```
 {
     email: String //邮箱
     password: String //密码
@@ -695,7 +695,7 @@ commentor {
 
 ##### 4.3 响应数据(`json`)
 
-```json
+```
 {
     statu: Boolean //获取状态，true: 获取成功; false: 获取失败
     reason: String //失败理由
@@ -705,7 +705,7 @@ commentor {
 
 ##### 4.4 请求数据(`json`)
 
-```json
+```
 {
     email: String //邮箱
 }
