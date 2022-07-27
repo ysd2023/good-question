@@ -1,0 +1,20 @@
+import axios from './axios'
+
+//获取联想建议
+function getSuggestionApi(data, success, fail) {
+	axios.get(`/api/suggestion?keyword=${data.keyword}`)
+	.then(res => success(res))
+	.catch(err => fail(err))
+}
+
+//获取问题列表
+function getQuestionsApi(data, success, fail) {
+	axios.get(`/api/getQuestions?tag=${data.tag}`)
+	.then(res => success(res))
+	.catch(err => fail(err))
+}
+
+export {
+	getSuggestionApi,
+	getQuestionsApi
+}

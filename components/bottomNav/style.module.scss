@@ -1,0 +1,26 @@
+.nav-container {
+	position: relative;
+	width: 100%;
+	height: 3rem;
+	box-shadow: 0 -5px 5px -2px #7e7e7e;
+	overflow: hidden;
+
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.link {
+	padding: 1rem;
+	line-height: 1rem;
+	text-align: center;
+	position: relative;
+}
+
+.linkactive {
+	padding: 1rem;
+	line-height: 1rem;
+	text-align: center;
+	background-color: orange;
+	color: white;
+}

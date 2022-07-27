@@ -1,34 +1,95 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 程序（网页部分）说明
 
-## Getting Started
+---
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
+
+## 一、应用框架
+
+### 1.开发环境
+
+- `node.js 16` + `next.js` + `react.js` 
+
+---
+
+
+
+### 2.第三方库扩展&依赖
+
+1. `scss`
+2. `axios`
+2. `redux`
+2. `react-redux`
+2. 
+
+---
+
+
+
+## 二、使用
+
+### 1. 安装&启动开发服务
+
+``` shell
+npm i //安装依赖
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```shell
+npm run dev //启动开发环境
+```
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+---
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Learn More
+### 2. 编译打包&部署
 
-To learn more about Next.js, take a look at the following resources:
+```shell
+npm run build //打包编译
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```shell
+npm run start //部署并启动服务
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 三、目录结构说明
+
+### 1. components
+
+该目录用于存放界面会用到的分离出来的组件
+
+---
+
+
+
+### 2. pages
+
+该目录用于存放页面，所见即为网站的路由
+
+---
+
+
+
+### 3. styles
+
+该目录用于存放组件或页面会用到的样式
+
+---
+
+
+
+### 4. public
+
+该目录主要用于存放界面会用到的字体、图片等文件
+
+---
+
+
+
+### 5. middleware
+
+该目录用于处理、封装相关中间件
