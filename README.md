@@ -20,6 +20,7 @@
 2. `axios`
 2. `redux`
 2. `react-redux`
+2. `PropTypes`
 2. 
 
 ---

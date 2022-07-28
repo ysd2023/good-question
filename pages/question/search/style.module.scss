@@ -11,8 +11,18 @@
 
     display: flex;
     align-items: center;
+    justify-content: center;
 
     border-bottom: 1px solid #d3d3d3;
+
+    span {
+        margin-right: 1rem;
+    }
+
+    svg {
+        width: 1rem;
+        height: 1rem;
+    }
 }
 
 .search-btn {
@@ -21,7 +31,7 @@
     background-color: #e8e8e8;
     padding: .5rem;
     border-radius: 0.5rem;
-    margin: 0 auto;
+    margin: 0;
 
     svg {
         width: 1rem;

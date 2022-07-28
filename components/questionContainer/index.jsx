@@ -28,7 +28,7 @@ function QuestionContainerComponent(props) {
 					data.questionList.map(item => questionList.push(item))
 					setQuestionList([...questionList])
 					setIsLoading(false)
-				}, () => { setIsloading(false) })
+				}, () => { setIsLoading(false) })
 			}, 1000)
 		}
 	}, [tab])

@@ -14,7 +14,23 @@ function getQuestionsApi(data, success, fail) {
 	.catch(err => fail(err))
 }
 
+//获取解决方案列表
+function getSolutionApi(data, success, fail) {
+	axios.get(`/api/getSolution`)
+	.then(res => success(res))
+	.catch(err => fail(err))
+}
+
+//获取评论
+function getCommentApi(data, success, fail) {
+	axios.get(`/api/getComment`)
+	.then(res => success(res))
+	.catch(err => fail(err))
+}
+
 export {
 	getSuggestionApi,
-	getQuestionsApi
+	getQuestionsApi,
+	getSolutionApi,
+	getCommentApi
 }

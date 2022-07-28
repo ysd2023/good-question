@@ -1,10 +1,20 @@
+import { useRouter } from 'next/router'
 import styles from './style.module.scss'
 
 function QuestionItemComponent(props) {
+	//使用路由
+	const router = useRouter()
+	//定义详情跳转事件
+	const detailTo = (questionId) => {
+		router.push({
+			pathname: `/question/detail/${questionId}`
+		})
+	}
+
 	return (
 		<div className={styles['question-item-container']}>
-			<p className={styles['question-item-title']}>震惊！这是一个问题！震惊！这是一个问题！震惊！这是一个问题！</p>
-			<section className={styles['question-item-content']}>
+			<p className={styles['question-item-title']} onClick={() => { detailTo('2022-7-28') }}>震惊！这是一个问题！震惊！这是一个问题！震惊！这是一个问题！</p>
+			<section className={styles['question-item-content']} onClick={() => { detailTo('2022-7-28') }}>
 				<div className={styles['question-item-summary']}>这是问题的简要描述！这是问题的简要描述！这是问题的简要描述！
 					这是问题的简要描述！这是问题的简要描述！这是问题的简要描述！这是问题的简要描述！这是问题的简要描述！这是问题的简要描述！
 				</div>

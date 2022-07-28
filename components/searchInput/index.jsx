@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
-import createAction from '/redux/createAction'
 import styles from './style.module.scss'
 import { getSuggestionApi } from '/middleware/request'
 
@@ -14,9 +12,6 @@ function SearchInputComponent(props) {
 
 	//绑定下拉框的可见性
 	const [isShow, setIsShow] = useState(false)
-
-	//定义修改store的keyword
-	const changeKeyWord = useDispatch()
 
 	/*
 	*搜索联想功能模块
@@ -58,7 +53,6 @@ function SearchInputComponent(props) {
 	const [suggestionList, setSuggestionList] = useState([])
 	//定义搜索跳转事件
 	const searchTo = (keyword) => {
-		changeKeyWord(createAction('changesearch', keyword))
 		router.push({ pathname: '/question/search', query: { keyword } })
 	}
 
