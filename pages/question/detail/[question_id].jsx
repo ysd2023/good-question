@@ -112,9 +112,11 @@ function questionDetailPage(props) {
 		    	<p>{currentSolution.solution.content}</p>
 		    	<hr/>
 		    	<section className={styles['solution-attitude']}>
-		    		<span onClick={() => {setCommentStatus(true)}}>评论{currentSolution.solution.comment}</span>
+		    		<span onClick={() => {setCommentStatus(!commentStatus)}}>评论{currentSolution.solution.comment}</span>
 		    		<span>赞同{currentSolution.solution.favor}</span>
 		    		<span>反对{currentSolution.solution.opposition}</span>
+		    		<br/>
+		    		<br/>
 		    	</section>
 		    </div>
 		    <button className={styles['dock-btn']} onClick={() => setIsDockOpen(!isDockOpen)}>
@@ -122,7 +124,7 @@ function questionDetailPage(props) {
 		    	<svg t="1658990687360" className={`${isDockOpen ? styles['dock-btn-open'] : styles['dock-btn-close']}`} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5243" width="200" height="200"><path d="M913.15 260.51a480.53 480.53 0 0 0-203.8-174 40 40 0 0 0-32.92 72.91C819.53 224.06 912 367.23 912 524.19c0 220.56-179.44 400-400 400s-400-179.44-400-400c0-157 92.47-300.14 235.57-364.75a40 40 0 0 0-32.92-72.91 480 480 0 1 0 598.5 174z" fill="#FF8429" p-id="5244"></path><path d="M172.06 524.19a15 15 0 1 0-30 0 369.94 369.94 0 1 0 739.88 0 369 369 0 0 0-120.59-273.27 15 15 0 1 0-20.23 22.16 340.79 340.79 0 0 1 110.82 251.11c0 187.44-152.5 339.94-339.94 339.94S172.06 711.64 172.06 524.19z" fill="#FF8429" p-id="5245"></path><path d="M692.89 218.75m-15 0a15 15 0 1 0 30 0 15 15 0 1 0-30 0Z" fill="#FF8429" p-id="5246"></path><path d="M512 595.26a40 40 0 0 0 40-40V59.81a40 40 0 0 0-80 0v495.45a40 40 0 0 0 40 40z" fill="#00CEDD" p-id="5247"></path></svg>
 		    </button>
 		    <div className={`${styles['dock-operation-default']} ${isDockOpen ? styles['dock-operation-open'] : styles['dock-operation-close']}`}>
-		    	<button>
+		    	<button onClick={() => alert(66)}>
 		    		<svg t="1658995852328" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8504" width="200" height="200"><path d="M112.5 650l542.4-542.4c10.3-10.3 24.1-16 38.9-16s28.6 5.7 38.9 16l183.8 183.8c10.3 10.3 16 24.1 16 38.9s-5.7 28.6-16 38.9L374.1 911.6 112.5 650z" fill="#FFCC72" p-id="8505"></path><path d="M693.7 116.6c8.1 0 15.6 3.1 21.2 8.7l183.8 183.8c5.6 5.6 8.7 13.1 8.7 21.2s-3.1 15.6-8.7 21.2L374.1 876.3 147.8 650l524.7-524.7c5.6-5.6 13.2-8.7 21.2-8.7m0-50c-20.5 0-41 7.8-56.6 23.3l-560 560 297 297 560-560c31.1-31.1 31.1-82 0-113.1L750.3 90c-15.6-15.6-36.1-23.4-56.6-23.4z" fill="#3A3644" p-id="8506"></path><path d="M557.3 205.2l97.6-97.6c10.3-10.3 24.1-16 38.9-16s28.6 5.7 38.9 16l183.8 183.8c10.3 10.3 16 24.1 16 38.9 0 14.8-5.7 28.6-16 38.9l-97.6 97.6-261.6-261.6z" fill="#F95360" p-id="8507"></path><path d="M693.7 116.6c8.1 0 15.6 3.1 21.2 8.7l183.8 183.8c5.6 5.6 8.7 13.1 8.7 21.2s-3.1 15.6-8.7 21.2l-79.9 79.9-226.2-226.2 79.9-79.9c5.6-5.6 13.2-8.7 21.2-8.7m0-50c-20.5 0-41 7.8-56.6 23.3L521.9 205.2l297 297L934.1 387c31.1-31.1 31.1-82 0-113.1L750.3 90c-15.6-15.6-36.1-23.4-56.6-23.4z" fill="#3A3644" p-id="8508"></path><path d="M582 265.3l35.4 35.4-409.2 409.2-35.4-35.4L582 265.3zM243.5 745.2l35.4 35.4 409.2-409.2-35.4-35.4-409.2 409.2z m479.9-338.4L314.2 815.9l35.4 35.4 409.2-409.2-35.4-35.3z" fill="#ED9D29" p-id="8509"></path><path d="M621.064 176.827L847.336 403.1l-28.284 28.284L592.78 205.111z" fill="#ED3248" p-id="8510"></path><path d="M557.202 240.573l226.272 226.272-28.284 28.284-226.272-226.272z" fill="#A87729" p-id="8511"></path><path d="M101.8 660.7l10.9-10.9 261.2 261.1-11 11-270.5 9.3z" fill="#E5E5E5" p-id="8512"></path><path d="M125.5 697.9l200.2 200.2-207.4 7.1 7.2-207.3m-12.8-83.5L77.1 650 66.5 957.1l307.1-10.6 35.6-35.6-296.5-296.5z" fill="#3A3644" p-id="8513"></path><path d="M95.5 875.8l52.8 52.8-55.3 2.5z" fill="#E5E5E5" p-id="8514"></path><path d="M73.1 818.1l-6.3 139.3 139.3-6.4-133-132.9z" fill="#3A3644" p-id="8515"></path><path d="M326.2 898.4l-168.4 4.3-15-15 117.8-54.9z" fill="#BFBFBF" p-id="8516"></path></svg>
 		    	</button>
 		    	<button>
@@ -136,16 +138,21 @@ function questionDetailPage(props) {
 		    	</button>
 		    </div>
 		    <div className={`${styles['comment-container-default']} ${ commentStatus ? styles['comment-container-open'] : styles['comment-container-close']}`}>
-			    <section className={styles['comment-title']}>
-			    	<button onClick={() => {setCommentStatus(false)}}>
-			    		<svg t="1659013699208" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="14322" width="200" height="200"><path d="M150.528 355.328a76.8 76.8 0 0 1 108.544 0L512 608.256l252.928-252.928a76.8 76.8 0 0 1 108.544 108.544l-307.2 307.2a76.8 76.8 0 0 1-108.544 0l-307.2-307.2a76.8 76.8 0 0 1 0-108.544z" p-id="14323" fill="#8a8a8a"></path></svg>
-			    	</button>
-			    </section>
-			    <hr/>
 	    		<div className={styles['comment-area']}>
 	    			<CommentArea rid={currentSolution.rid || 'null'}/>
 	    		</div>
 		    </div>
+		    <footer className={styles['question-detail-footer']}>
+		    	<p>
+		    		<span>这里是页脚</span>
+		    		<span>没有特别鸣谢</span>
+		    		<span>没有友情链接</span>
+		    	</p>
+		    	<br/>
+		    	<br/>
+		    	<br/>
+		    	<br/>
+		    </footer>
 		</div>
 	)
 }

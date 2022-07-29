@@ -65,7 +65,7 @@
 }
 
 .solution-attitude {
-	margin-bottom: 0.5rem;
+	// margin-bottom: 1rem;
 
 	span {
 	    background-color: #e7f3ff;
@@ -77,7 +77,7 @@
 
 .dock-btn {
 	position: fixed;
-	bottom: 5%;
+	bottom: 15%;
 	right: 5%;
 	height: 2.5rem;
 	width: 2.5rem;
@@ -85,6 +85,7 @@
 	background-color: rgba(0, 0, 0, 0.1);
 	backdrop-filter: blur(1rem);
 	border-radius: 0.1rem;
+	z-index: 2;
 
 	svg {
 		position: absolute;
@@ -109,8 +110,9 @@
 .dock-operation-default {
 	position: fixed;
 	width: 2.5rem;
-	bottom: calc(5% + 2.5rem);
+	bottom: calc(15% + 2.5rem);
 	right: 5%;
+	z-index: 2;
 
 
 	button {
@@ -121,7 +123,7 @@
 		background-color: rgba(0, 0, 0, 0.2);
 		backdrop-filter: blur(1rem);
 		border-radius: 0.1rem;
-
+		
 		svg {
 			position: absolute;
 			height: 100%;
@@ -175,31 +177,21 @@
 	}
 }
 
-.comment-container-default {
-	position: fixed;
-	height: 60%;
-	width: 100%;
-	max-width: 500px;
-	transition: 0.5s all ease;
+.comment-container-default {	
 	background-color: white;
-	border-top-left-radius: 1rem;
-	border-top-right-radius: 1rem;
 	box-shadow: 0 -5px 5px -2px gray;
 }
 
 .comment-container-close {
-	bottom:0;
-	transform: translateY(150%);
+	display: none;
 }
 
 .comment-container-open {
-	bottom: -60%;
-	transform: translateY(-100%);
+	display: block;
 }
 
 
 .comment-title {
-	display: flex;
 	align-items: center;
 	justify-content: space-around;
 
@@ -227,5 +219,16 @@
 .comment-area {
 	position: relative;
 	width: 100%;
-	height: 100%''
+	height: calc(100% - 3rem);
+}
+
+.question-detail-footer {
+	border-top: 1px solid black;
+    background-color: #312f2f;
+    color: #e1e1e1;
+    text-align: center;
+
+	span {
+		display: block;
+	}
 }

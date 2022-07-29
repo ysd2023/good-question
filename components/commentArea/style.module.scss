@@ -1,0 +1,146 @@
+.comment-container-all {
+	// position: absolute;
+	// height: 100%;
+	// width: 100%;
+}
+
+.comment-title-tip {
+	position: relative;
+	height: 10%;
+	margin: 0;
+	box-shadow: 0 5px 5px -2px #dedede;
+}
+
+.comment-container {
+	position: relative;
+	height: 80%;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	ul {
+		list-style: none;
+		padding: 1rem;
+		margin: 0;
+	}
+}
+
+.commentor-container {
+	height: 3rem;
+	display: flex;
+	align-items: center;
+
+	span {
+		font-size: 1.1rem;
+	    color: #7f7f7f
+	}
+}
+
+.commentor-avatar {
+	height: 2rem;
+	width: 2rem;
+	display: inline-block;
+	border-radius: 50%;
+	overflow: hidden;
+	margin: 0 0.5rem;
+
+	img {
+		object-fit: cover;
+		height: 100%;
+	}
+}
+
+.comment-publish {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	max-width: 500px;
+	background-color: white;
+	box-shadow: 0 0 10px gray;
+	padding: 1rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	span {
+		display: flex;
+		align-items: center;
+		position: relative;
+		width: 90%;		background-color: #d4d4d4;
+		border-radius: 0.5rem;
+		padding: 0.1rem;
+		border: 1px solid gray;
+
+		svg {
+			height: 2rem;
+			width: 2rem;
+			padding: 0.1rem;
+		}
+	}
+}
+
+.comment-publish-writing {
+	position: fixed;
+	top: 0;
+	z-index: 3;
+	height: 100%;
+	width: 100%;
+	max-width: 500px;
+}
+
+.comment-writing-overlay {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.6);
+}
+
+.comment-writing-content {
+	position: fixed;
+	width: 100%;
+	bottom: 2rem;
+	padding: 1rem 0;
+	z-index: 4;
+	background-color: white;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+
+	textarea {
+		width: 90%;
+		height: 5rem;
+		display: block;
+		margin: 0 auto;
+	}
+
+	button {
+		display: block;
+		margin-bottom: 1rem;
+		height: 2rem;
+		width: 2.5rem;
+		outline: none;
+		border: none;
+		background-color: transparent;
+
+		svg {
+			position: relative;
+			height: 100%;
+			width: 100%;
+		}
+	}
+}
+
+.question-footer {
+	text-align: center;
+	padding: 1rem;
+
+	button {
+		outline: none;
+		border: none;
+		color: blue;
+		font-size: 1rem;
+	}
+}

@@ -18,10 +18,10 @@
 
 1. `scss`
 2. `axios`
-2. `redux`
-2. `react-redux`
-2. `PropTypes`
-2. 
+3. `redux`
+4. `react-redux`
+5. `PropTypes`
+6. 
 
 ---
 
