@@ -23,7 +23,7 @@ function SearchInputComponent(props) {
 		//发送请求获取建议
 		getSuggestionApi({ keyword }, ({data}) => {
 			suggestionList.splice(0)
-			data.map(item => {suggestionList.push(item)})
+			data.list.map(item => {suggestionList.push(item)})
 			setSuggestionList([...suggestionList])
 		}, (err) => { console.log(err) })
 	}

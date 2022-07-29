@@ -62,6 +62,10 @@ function CommentAreaComponent(props) {
 			<div className={styles['comment-container']}>
 				<ul>
 					{
+						commentList.length === 0
+						?
+						<li>很遗憾，暂时没有人发表评论</li>
+						:
 						commentList.map(item => (
 							<li key={item.cid} onClick={() => replyEditor('@' + item.commentor.nickName)}>
 								<div className={styles['commentor-container']}>

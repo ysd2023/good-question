@@ -1,4 +1,8 @@
 import Head from 'next/head'
+import Dynamic from 'next/dynamic'
+import styles from './style.module.scss'
+// import SoutionEditor from '/components/solutionEditor'
+const SolutionEditor = Dynamic(import ('/components/solutionEditor'))
 
 function editorSolutionPage(props) {
 	return (
@@ -7,7 +11,10 @@ function editorSolutionPage(props) {
 		        <title>好问题-编辑</title>
 		        <link rel="icon" href="/favicon.png" />
 		    </Head>
-		    <p>这是关于{props.question_id}解决方案编辑页面</p>
+		    <div className={styles['question-container']}></div>
+		    <div className={styles['editor-container']}>
+		    	<SolutionEditor/>
+		    </div>
 		</div>
 	)
 }
