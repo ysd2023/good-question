@@ -1,13 +1,13 @@
 .item-in {
-	transition: 0.5s all ease;
-	transform: scale(1);
-	// animation: item-in 0.5s linear forwards;
+	// transition: 0.5s all ease;
+	transform: scale(0);
+	animation: item-in 0.3s linear forwards;
 }
 
-.item-in {
-	transition: 0.5s all ease;
+.item-out {
+	// transition: 0.5s all ease;
 	transform: scale(1);
-	animation: item-out 0.5s linear forwards;
+	animation: item-out 0.3s linear forwards;
 }
 
 @keyframes item-in {

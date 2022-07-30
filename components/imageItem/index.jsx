@@ -23,7 +23,13 @@ function ImageItemComponent(props) {
 			setChildren(newChildren)
 		} else if(props.children.length < children.length) {
 			//若是减少，则给删除元素添加退场动画
-			setChildren(props.children)
+			const newChildren = children.map(child => {
+				const newChild = child.props.children
+				if(changeKeySet.has(child.key)) return Object.assign({}, child, { props: { className: styles['item-out'], children: newChild } })
+				else return child
+			})
+			setChildren(newChildren)
+			setTimeout(() => setChildren(props.children), 500)
 		}
 	}, [props.children])
 
