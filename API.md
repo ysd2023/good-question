@@ -88,7 +88,7 @@ publisher {
 question {
     title: String //问题的标题
     summary: String //对问题的简单描述，可选
-    imageDescirption: Array<image[url]> //问题的图像描述,可选
+    imageDescription: Array<image[url]> //问题的图像描述,可选
     tag: Array<String> //问题所属标签
 }
 ```
@@ -112,6 +112,7 @@ question {
 ##### 3.1 接口功能
 
 - 获取对应问题下的解决方案，分页获取
+- 获取单个解决方案，根据唯一标识（pending）
 
 ##### 3.2 接口地址（get）
 
@@ -120,12 +121,15 @@ question {
 ##### 3.3 响应数据（`json`)
 
 ```
-{
+分页获取返回结果: {
     solutionList: Array<{
         resolver: Object //提出解决方案的用户信息
         solution: Object //解决方案
         citeSolution: Object //引用的解决方案
     }>
+};
+单个解决方案返回结果 {
+    solution: Object<solution>//返回单个解决方案的内容
 }
 ```
 
