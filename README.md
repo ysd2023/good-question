@@ -21,6 +21,7 @@
 3. `redux`
 4. `react-redux`
 5. `PropTypes`
+6. `wangEditor`
 6. 
 
 ---

@@ -37,11 +37,6 @@ function SolutionEditorComponent(props) {
 
     // 及时销毁 editor ，重要！
     useEffect(() => {
-        if(editor) {
-            const toolbar = DomEditor.getToolbar(editor)
-            const curToolbarConfig = toolbar.getConfig()
-            console.log( curToolbarConfig.toolbarKeys ) // 当前菜单排序和分组
-        }
         return () => {
             if (editor == null) return
             editor.destroy()

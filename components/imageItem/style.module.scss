@@ -1,0 +1,23 @@
+.item-in {
+	transition: 0.5s all ease;
+	transform: scale(1);
+	// animation: item-in 0.5s linear forwards;
+}
+
+.item-in {
+	transition: 0.5s all ease;
+	transform: scale(1);
+	animation: item-out 0.5s linear forwards;
+}
+
+@keyframes item-in {
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes item-out {
+	100% {
+		transform: scale(0);
+	}
+}
