@@ -1,0 +1,18 @@
+.btn-image-upload {
+	position: fixed;
+	height: 3rem;
+	width: 3rem;
+	right: 5%;
+	bottom: 10%;
+	border-radius: 50%;
+	border: none;
+	outline: none;
+
+	background-color: #dedede;
+
+	svg {
+		// position: relative;
+		height: 100%;
+		width: 100%;
+	}
+}
