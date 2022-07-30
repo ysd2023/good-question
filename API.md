@@ -32,25 +32,36 @@
 
 ```
 question {
+    questionID: Number //问题索引
     title: String //问题的标题
     summary: String //对问题的简单描述，可选
     cover: image[url] //问题的图像封面链接，可选
     publisher: Object //发起问题的人的信息
-    tag: Array<String> //问题所属标签
+    tag: Array<Object> //问题所属标签
 },
 publisher {
     nickName: String //发起者的昵称
     avatar: image[url] //发起者头像链接
+},
+tag {
+    id: Number //标签索引
+    context: String 标签内容
 }
 ```
 
 ##### 1.4 请求数据（`type[ formData | json ]`）
 
 ```
-{}
+{
+    summary: String //对请求问题的简单描述，可选
+    page: Number //请求所需页面数据的页码，可选，默认为0
+    tag: Object //请求问题包含的标签，可选
+},
+tag {
+    id: Number //标签索引
+    context: String 标签内容
+}
 ```
-
-**需要补充**
 
 
 
@@ -74,7 +85,6 @@ publisher {
 {
     publisher: Object //发布者相关信息
     question: Object //问题的相关信息
-    solutionNum: Number //该解决方案的个数
 }
 ```
 
@@ -86,20 +96,32 @@ publisher {
     avatar: image[url] //发布者头像链接
 },
 question {
+    questionID: Number //问题索引
     title: String //问题的标题
     summary: String //对问题的简单描述，可选
+<<<<<<< HEAD
     imageDescription: Array<image[url]> //问题的图像描述,可选
     tag: Array<String> //问题所属标签
+=======
+    solutionNum: Number //该解决方案的个数
+    imageDescirption: Array<image[url]> //问题的图像描述,可选
+    publisher: Object //发起问题的人的信息
+    tag: Array<Object> //问题所属标签
+},
+tag {
+    tagID: Number //标签索引
+    context: String //标签内容
+>>>>>>> 950d7cf (接口请求数据完善)
 }
 ```
 
 ##### 2.4 请求数据（`type[ formData | json ]`）
 
 ```
-{}
+{
+    questionID: Number //问题索引
+}
 ```
-
-**需要补充**
 
 
 
@@ -123,9 +145,7 @@ question {
 ```
 分页获取返回结果: {
     solutionList: Array<{
-        resolver: Object //提出解决方案的用户信息
         solution: Object //解决方案
-        citeSolution: Object //引用的解决方案
     }>
 };
 单个解决方案返回结果 {
@@ -136,30 +156,32 @@ question {
 *补充解释：*
 
 ```
-resolver {
-    nickName: String //解决问题用户名字
-    avatar: image[url] //解决问题用户头像链接
-},
 solution {
+    solutionID: Number //解决方案索引
+    resolver: Object //提出解决方案的用户信息
     content: String //解决方案内容
     comment: Number //评论数量
     favor: Number //同意数量
     opposition: Number //反对数量
+    citeSolution: solution //引用的解决方案的索引
 },
-citeSolution {
-    resolverName: String //被引用方案的用户昵称
-    content: String //引用方案的内容
+resolver {
+    nickName: String //解决问题用户名字
+    avatar: image[url] //解决问题用户头像链接
 }
 ```
+
+
 
 ##### 3.4 请求数据（`type[ formData | json ]`）
 
 ```
-{}
+{
+    questionID: Number //问题索引，可选，与title二者选一
+}
 ```
 
-**需要补充**
-
+**仍需要继续讨论修改**
 
 
 ---
@@ -181,6 +203,7 @@ citeSolution {
 ```
 {
     commentorList: Array<{
+        commentID: Number //评论索引
         commentor: Object //评论者相关信息
         content: String //评论内容
         replyTarget: String //回复对象名字,可选
@@ -200,10 +223,11 @@ commentor {
 ##### 4.4 请求数据（`type[ formData | json ]`）
 
 ```
-{}
+{
+    solutionID:Number //解决方案索引
+    page: Number //请求所需页面数据的页码，可选，默认为0
+}
 ```
-
-**需要补充**
 
 
 
@@ -234,8 +258,8 @@ commentor {
 
 ```
 {
-    citeSolutionID: [pending] //被引用的解决方案的id,可选，空则表示无引用
-    content: String //解决方案内容
+    citeSolutionID: Number //被引用的解决方案的id,可选，空则表示无引用
+    content: String //解决方案内容，可选
 }
 ```
 
@@ -312,15 +336,20 @@ commentor {
 }
 ```
 
+
 ##### 8.4 请求数据（`json`）
 
 ```
 {
+    
+    commentor: Object //评论者相关信息
     content: String //评论内容
+    replyTarget: String //回复对象名字,可选
+},
+commentor {
+    commentorID: Number //评论者索引
 }
 ```
-
-**需要补充**
 
 
 
@@ -352,11 +381,10 @@ commentor {
 
 ```
 {
+    solutionID:Number //解决方案索引
     attitude: Boolean //态度。true: 赞成; false: 反对. 
 }
 ```
-
-**需要补充**
 
 
 
@@ -425,9 +453,16 @@ commentor {
 
 ```
 {
-    title: String //问题的主要标题
-    content: String //问题的主要描述
-}
+    question: Object //发布的问题
+},
+question {
+    questionID: Number //问题索引
+    title: String //问题的标题
+    summary: String //对问题的简单描述，可选
+    cover: image[url] //问题的图像封面链接，可选
+    publisher: Object //发起问题的人的信息
+    tag: Array<Object> //问题所属标签
+},
 ```
 
 **需要补充**
@@ -556,12 +591,11 @@ commentor {
         title: String //问题的标题
         summary: String //问题的描述
         date: String //提出问题的时间
-        questionID: [pending] //问题的标识,可以获取问题的信息
+        questionID: Number //问题的标识,可以获取问题的信息
     }>
 }
 ```
 
-*`pending`:待定*
 
 ##### 4.4 请求数据（`type [ formData | json]`）
 
