@@ -11,10 +11,8 @@ function SolutionEditorComponent(props) {
 
     // 模拟 ajax 请求，异步设置 html
     useEffect(() => {
-        setTimeout(() => {
-            setHtml('')
-        }, 1500)
-    }, [])
+        props.changeContent(html)
+    }, [html])
 
     // 工具栏配置 
     const toolbarConfig = { 

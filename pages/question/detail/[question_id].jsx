@@ -121,7 +121,7 @@ function questionDetailPage(props) {
 		    		“<p>{currentSolution.citeSolution.resolverName}:</p>
 		    		<p>{currentSolution.citeSolution.content}</p>”
 		    	</section>
-		    	<p ref={solutionRef} className={styles['solution-content']}></p>
+		    	<div ref={solutionRef} className={styles['solution-content']}></div>
 		    	<hr/>
 		    	<section className={styles['solution-attitude']}>
 		    		<span onClick={() => {setCommentStatus(!commentStatus)}}>评论{currentSolution.solution.comment}</span>

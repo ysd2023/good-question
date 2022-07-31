@@ -15,27 +15,6 @@
 
     	z-index: 4;
     }
-
-	span {
-		transition: 0.8s all ease;
-		background-color: #3880ff;
-
-		&::before {
-			content: "";
-	        position: absolute;
-	        left: 0;
-	        width: 600px;
-	        height: 600px;
-	        background-color: #3880ff;
-	        animation-name: rotate;
-	        animation-iteration-count: infinite;
-	        animation-timing-function: linear;
-	        top: 0;
-	        border-radius: 48%;
-	        animation-duration: 5s;
-	    }
-
-	}
 }
 
 .publish-tip-container {
@@ -46,6 +25,58 @@
 	color: white;
 	z-index: 5;
 	bottom: 15%;
+}
+
+.result-container {
+	position: absolute;
+	z-index: 5;
+}
+
+.progress-default {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	display: block;
+	transition: 0.8s all ease;
+
+	&::before {
+        transition: 0.8s all ease;
+		content: "";
+        position: absolute;
+        left: 0;
+        width: 600px;
+        height: 600px;
+        animation-name: rotate;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        top: 0;
+        border-radius: 48%;
+        animation-duration: 5s;
+    }
+}
+
+.progress-background-normal {
+	background-color: #3880ff;
+
+	&::before {
+        background-color: #3880ff;
+    }
+}
+
+.progress-background-error {
+	background-color: #ff6d6d;
+
+	&::before {
+        background-color: #ff6d6d;
+    }
+}
+
+.progress-background-success {
+	background-color: #45db85;
+
+	&::before {
+        background-color: #45db85;
+    }
 }
 
 @keyframes rotate {

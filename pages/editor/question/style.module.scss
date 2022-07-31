@@ -144,3 +144,28 @@
 		width: 100%;
 	}
 }
+
+.progress-container {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	max-width: 500px;
+	z-index: 5;
+
+	background-color: #00000085;
+}
+
+.success-btn {
+	padding: 0.5rem;
+	outline: none;
+	border: none;
+	background-color: white;
+}
+
+.success-container {
+	position: fixed;
+	top: 30%;
+	width: 100%;
+	text-align: center;
+}

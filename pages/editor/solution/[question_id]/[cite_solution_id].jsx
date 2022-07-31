@@ -1,16 +1,30 @@
 import Head from 'next/head'
 import { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import { nanoid } from 'nanoid'
 import styles from './style.module.scss'
 import TransitionGroup from '/components/transitionGroup'
 
+import { uploadImageApi } from '/middleware/request'
+
 const SolutionEditor = dynamic(() => import('/components/solutionEditor'), {
   ssr: false
 })
 
+const VerticalProgress = dynamic(() => import ('/components/verticalProgress'), {
+	ssr: false
+})
 
 function editorSolutionCitePage(props) {
+	//定义路由
+	const router = useRouter()
+	//定义文本内容
+	const [textContent, setTextContent] = useState('')
+
+	//定义最终发表内容
+	const [finalContents, setFinalContents] = useState('')
+
 	//定义上传图片列表
 	//每张图片有三个属性 id, base64, file
 	const [imageList, setImageList] = useState([])
@@ -48,6 +62,74 @@ function editorSolutionCitePage(props) {
 		setImageList([...imageList])
 	}
 
+	//定义发布状态
+	const [publishStatus, setPublishStatus] = useState('normal')
+
+	//定义发布进度
+	const [progress, setProgress] = useState(100)
+
+	//定义发布界面的可见性
+	const [isPublishing, setIsPublishing] = useState(false)
+
+	//定义发布事件
+	const publish = () => {
+		if(textContent === '<p><br></p>') {
+			alert('文本内容不可为空')
+			return;
+		}
+		//打开发布界面
+		setProgress(0)
+		setIsPublishing(true)
+		//定义promise数组
+		const imagePromise = []
+		//先上传图片，将图片转换成url
+		imageList.map(image => {
+			let formData = new FormData()
+			formData.append('upload-image', image.file)
+			imagePromise.push(new Promise((resolve) => {
+				uploadImageApi(formData, (res) => {
+					resolve(res.data)
+				}, (err) => { resolve({errno: 1}) })
+			}))
+		})
+		//合并图片url和文本内容，并上传
+		Promise.all(imagePromise).then(res => {
+			let uploadSuccessImageNum = res.filter(item => item.errno === 0).length
+			setProgress(9)
+			setTimeout(() => {
+				let finalContent = textContent
+				res.map(image => {
+					if(image.errno === 0) {
+						finalContent += `<img src="${image.data.url}" alt="${image.data.alt}"/>`
+					} else {
+						finalContent += '<img src="#####" alt="图片损坏"/>'
+					}
+			  })
+			  setFinalContents(finalContent)
+			  setProgress(9 + uploadSuccessImageNum * 9)
+				//延迟上传
+				setTimeout(() => {
+					console.log(finalContents)
+					// setProgress(100)
+					// setPublishStatus('success')
+					setPublishStatus('error')
+				}, 2000)
+			}, 2000)
+		})
+	}
+
+	//定义重新上传事件
+	const rePublish = () => {
+		setPublishStatus('normal')
+		//延迟上传
+		setTimeout(() => {
+			console.log(finalContents)
+			setProgress(100)
+			setPublishStatus('success')
+			// setPublishStatus('error')
+		}, 2000)
+	}
+
 
 	return (
 		<div>
@@ -64,13 +146,13 @@ function editorSolutionCitePage(props) {
 		    	</section>
 		    </div>
 		    <div className={styles['editor-container']}>
-		    	<SolutionEditor/>
+		    	<SolutionEditor changeContent={(content) => setTextContent(content)}/>
 		    </div>
 		    <button className={styles['btn-image-upload']} onClick={() => setIsShowImageList(!isShowImageList)}>
 		    	<svg t="1659110803949" className={`${!isShowImageList ? styles['btn-image-upload-icon-open'] : styles['btn-image-upload-icon-close']}`} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5765" width="200" height="200"><path d="M725.333333 128H298.666667C181.034667 128 85.333333 223.701333 85.333333 341.333333v341.333334c0 117.632 95.701333 213.333333 213.333334 213.333333h426.666666c117.632 0 213.333333-95.701333 213.333334-213.333333V341.333333c0-117.632-95.701333-213.333333-213.333334-213.333333zM298.666667 213.333333h426.666666c70.570667 0 128 57.429333 128 128v195.669334l-152.874666-152.874667a85.632 85.632 0 0 0-120.917334 0L384 579.669333l-24.874667-24.874666a85.632 85.632 0 0 0-120.917333 0L170.666667 622.336V341.333333c0-70.570667 57.429333-128 128-128z m-21.333334 170.666667a64 64 0 1 1 128.042667 0.042667A64 64 0 0 1 277.333333 384z" fill="#40A9FF" p-id="5766"></path><path d="M579.541333 384.128a85.632 85.632 0 0 1 120.917334 0l78.677333 78.677333L345.898667 896H298.666667a213.12 213.12 0 0 1-169.941334-84.48l243.584-243.541333 11.690667 11.690666z m219.52-242.986667a214.058667 214.058667 0 0 1 136.704 165.034667L853.333333 388.522667V341.333333a128.170667 128.170667 0 0 0-120.490666-127.786666l-5.973334-0.170667z" fill="#53B1FF" p-id="5767"></path><path d="M170.666667 467.84v154.453333l67.541333-67.498666a85.632 85.632 0 0 1 120.917333 0l13.141334 13.141333-243.541334 243.541333a212.181333 212.181333 0 0 1-43.178666-119.552L85.333333 682.666667v-129.493334l85.333334-85.333333zM341.333333 320a64 64 0 1 1-0.042666 128.042667A64 64 0 0 1 341.333333 320zM725.333333 128c25.898667 0 50.773333 4.650667 73.728 13.141333L726.826667 213.333333H425.216l85.333333-85.333333z" fill="#66BAFF" p-id="5768"></path><path d="M510.506667 128l-85.333334 85.333333H298.666667a128.170667 128.170667 0 0 0-127.786667 120.490667L170.666667 341.333333v126.506667l-85.333334 85.333333V341.333333a213.589333 213.589333 0 0 1 204.074667-213.12L298.666667 128h211.84z" fill="#8CCBFF" p-id="5769"></path></svg>
 		    	<svg t="1659190309560" className={`${isShowImageList ? styles['btn-image-upload-icon-open'] : styles['btn-image-upload-icon-close']}`} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2511" width="200" height="200"><path d="M512 512m-448 0a448 448 0 1 0 896 0 448 448 0 1 0-896 0Z" fill="#fa3a5b" p-id="2512" data-spm-anchor-id="a313x.7781069.0.i1"></path><path d="M512 455.431l169.706-169.705a8 8 0 0 1 11.313 0l45.255 45.255a8 8 0 0 1 0 11.313L568.57 512l169.705 169.706a8 8 0 0 1 0 11.313l-45.255 45.255a8 8 0 0 1-11.313 0L512 568.57 342.294 738.274a8 8 0 0 1-11.313 0l-45.255-45.255a8 8 0 0 1 0-11.313L455.43 512 285.726 342.294a8 8 0 0 1 0-11.313l45.255-45.255a8 8 0 0 1 11.313 0L512 455.43z" fill="#FFFFFF" p-id="2513"></path></svg>
 		    </button>
-		    <button className={styles['btn-publish']}>
+		    <button className={styles['btn-publish']} onClick={() => publish()}>
 		    	<svg t="1659193364239" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6140" width="200" height="200"><path d="M0 0h1024v1024H0z" fill="#ee7c3e" fillOpacity=".01" p-id="6141"></path><path d="M893.44 75.849143L99.693714 466.432a36.571429 36.571429 0 0 0-4.681143 62.829714l183.369143 126.756572c15.798857 7.899429 31.524571 7.899429 47.323429-7.899429l434.102857-370.980571-378.88 402.505143c-7.826286 7.899429-7.826286 15.798857-7.826286 23.698285v173.641143c0 15.798857 7.899429 31.597714 23.625143 39.497143 15.798857 7.899429 31.597714 0 39.497143-7.899429l86.820571-88.429714 192.073143 128.146286a36.571429 36.571429 0 0 0 56.027429-22.674286L945.298286 116.297143a36.571429 36.571429 0 0 0-51.931429-40.521143z" fill="#ee7c3e" p-id="6142"></path></svg>
 		    </button>
 		    <div className={`${ styles['editor-image-upload'] } ${ isShowImageList ? styles['editor-image-upload-open'] : styles['editor-image-upload-close']}`}>
@@ -92,6 +174,26 @@ function editorSolutionCitePage(props) {
 		    		</li>
 		    	</ul>
 		    </div>
+		    {
+		    	isPublishing
+		    	?
+		    	<div className={styles['progress-container']}>
+			    	<VerticalProgress percent={progress} tip="发布进度" successTip="发布成功!" progressStatus={publishStatus} errorTip="发布失败"
+			    	successSlot={
+			    		<div className={styles['success-container']}>
+			    			<button onClick={() => router.push({pathname: '/'})} className={styles['success-btn']}>返回首页</button>
+			    		</div>
+			    	}
+			    	errorSlot={
+			    		<div className={styles['success-container']}>
+			    			<button onClick={() => rePublish()} className={styles['success-btn']}>重新上传</button>
+			    		</div>
+			    	}
+			    	/>
+			    </div>
+			    : 
+			    ''
+		    }
 		    <input type="file" multiple ref={inputFilesRef} style={{ display: 'none' }} onChange={() => addImage()}/>
 		</div>
 	)
