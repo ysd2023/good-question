@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import styles from './style.module.scss'
 import differentArray from '/middleware/differentArray'
 
-function ImageItemComponent(props) {
+function TransitionGroupComponent(props) {
 	const [children, setChildren] = useState(props.children)
 
 	useEffect(() => {
@@ -29,7 +29,7 @@ function ImageItemComponent(props) {
 				else return child
 			})
 			setChildren(newChildren)
-			setTimeout(() => setChildren(props.children), 500)
+			setTimeout(() => setChildren(props.children), 300)
 		}
 	}, [props.children])
 
@@ -42,4 +42,4 @@ function ImageItemComponent(props) {
 	)
 }
 
-export default ImageItemComponent
+export default TransitionGroupComponent

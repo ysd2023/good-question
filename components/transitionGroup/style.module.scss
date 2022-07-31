@@ -1,12 +1,10 @@
 .item-in {
-	// transition: 0.5s all ease;
 	transform: scale(0);
 	animation: item-in 0.3s linear forwards;
 }
 
 .item-out {
-	// transition: 0.5s all ease;
-	transform: scale(1);
+	// transform: scale(1);
 	animation: item-out 0.3s linear forwards;
 }
 
@@ -17,7 +15,12 @@
 }
 
 @keyframes item-out {
-	100% {
+	80% {
 		transform: scale(0);
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+		position: absolute;
 	}
 }

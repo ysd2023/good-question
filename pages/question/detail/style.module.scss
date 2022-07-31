@@ -232,3 +232,14 @@
 		display: block;
 	}
 }
+
+.solution-content {
+	width: 100%;
+	max-width: 500px;
+
+	img {
+		position: relative;
+		width: 100%;
+		object-fit: contain;
+	}
+}

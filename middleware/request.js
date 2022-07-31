@@ -28,9 +28,16 @@ function getCommentApi(data, success, fail) {
 	.catch(err => fail(err))
 }
 
+function uploadImageApi(data, success, fail) {
+	axios.post(`/api/uploadImage`, data)
+	.then(res => success(res))
+	.catch(err => fail(err))
+}
+
 export {
 	getSuggestionApi,
 	getQuestionsApi,
 	getSolutionApi,
-	getCommentApi
+	getCommentApi,
+	uploadImageApi
 }

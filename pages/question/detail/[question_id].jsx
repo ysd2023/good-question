@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { getSolutionApi } from '/middleware/request'
 import styles from './style.module.scss'
@@ -12,6 +12,8 @@ function questionDetailPage(props) {
 	//定义路由
 	const router = useRouter()
 
+	//绑定解决方案段落的dom元素
+	const solutionRef = useRef()
 
 	/*
 	*解决方案加载、切换模块
@@ -66,6 +68,12 @@ function questionDetailPage(props) {
 		console.log(currentIndex)
 	}, [currentIndex])
 
+	//监听currentSolution变化，解决方案段落内容
+	useEffect(() => {
+		if(solutionRef.current) {
+			solutionRef.current.innerHTML = currentSolution.solution.content
+		}
+	}, [currentSolution])
 
 
 	/*
@@ -113,7 +121,7 @@ function questionDetailPage(props) {
 		    		“<p>{currentSolution.citeSolution.resolverName}:</p>
 		    		<p>{currentSolution.citeSolution.content}</p>”
 		    	</section>
-		    	<p>{currentSolution.solution.content}</p>
+		    	<p ref={solutionRef} className={styles['solution-content']}></p>
 		    	<hr/>
 		    	<section className={styles['solution-attitude']}>
 		    		<span onClick={() => {setCommentStatus(!commentStatus)}}>评论{currentSolution.solution.comment}</span>
