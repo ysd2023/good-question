@@ -265,7 +265,7 @@ commentor {
 
 **需要补充，PS：`pending`表示待定**
 
-
+*请求数据content内含标签 : '’<‘、’>‘等符号，需要进行转义*
 
 ---
 
@@ -298,7 +298,7 @@ commentor {
 
 ```
 {
-    wangeditor-uploaded-image: File
+    uploaded-image: File
 }
 ```
 
