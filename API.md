@@ -298,7 +298,7 @@ commentor {
 
 ```
 {
-    uploaded-image: File
+    upload-image: File
 }
 ```
 
@@ -782,4 +782,32 @@ question {
 ```
 
 
+
+---
+
+
+
+#### 5. 退出登录
+
+##### 5.1 接口功能
+
+- 用户退出系统
+
+##### 5.2 接口地址（get）
+
+- `url: 'api/quit'`
+
+##### 5.3 响应数据(`json`)
+
+```
+{
+    statu: Boolean //请求状态，true: 请求成功; false: 请求失败
+    reason: String //失败理由
+    vaildCode: String //验证码，可选
+}
+```
+
+##### 5.4 请求数据(无)
+
+**由session判断**
 
