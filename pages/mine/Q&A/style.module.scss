@@ -1,0 +1,30 @@
+.page-title {
+	font-size: 1.2rem;
+	text-align: center;
+}
+
+.list-item-container {
+	margin: 1rem 0;
+	padding: 0.5rem 0;
+	border-bottom: 2px solid #d8d8d8;
+
+	h2 {}
+
+	h3 {
+		color: orange;
+	}
+
+	p {}
+
+	div {
+		text-align: right;
+	}
+
+	section {
+		img {
+			position: relative;
+			width: 100%;
+			object-fit: contain;
+		}
+	}
+}

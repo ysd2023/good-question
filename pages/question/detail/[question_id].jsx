@@ -12,9 +12,6 @@ function questionDetailPage(props) {
 	//定义路由
 	const router = useRouter()
 
-	//绑定解决方案段落的dom元素
-	const solutionRef = useRef()
-
 	/*
 	*解决方案加载、切换模块
 	*/
@@ -68,13 +65,6 @@ function questionDetailPage(props) {
 		console.log(currentIndex)
 	}, [currentIndex])
 
-	//监听currentSolution变化，解决方案段落内容
-	useEffect(() => {
-		if(solutionRef.current) {
-			solutionRef.current.innerHTML = currentSolution.solution.content
-		}
-	}, [currentSolution])
-
 
 	/*
 	*评论模块
@@ -121,7 +111,7 @@ function questionDetailPage(props) {
 		    		“<p>{currentSolution.citeSolution.resolverName}:</p>
 		    		<p>{currentSolution.citeSolution.content}</p>”
 		    	</section>
-		    	<div ref={solutionRef} className={styles['solution-content']}></div>
+		    	<div className={styles['solution-content']} dangerouslySetInnerHTML={{__html: currentSolution.solution.content}}></div>
 		    	<hr/>
 		    	<section className={styles['solution-attitude']}>
 		    		<span onClick={() => {setCommentStatus(!commentStatus)}}>评论{currentSolution.solution.comment}</span>
