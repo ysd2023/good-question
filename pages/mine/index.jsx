@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import styles from './style.module.scss'
+import BottomNav from '/components/bottomNav'
 
 function minePage() {
 	//定义路由
@@ -49,6 +50,9 @@ function minePage() {
 			    	</li>
 		    	</ul>
 		    	<a onClick={() => router.push({ pathname: '/mine/Q&A' })}>查看相关</a>
+		    </div>
+		    <div className={styles['bottom-nav']}>
+		    	<BottomNav/>
 		    </div>
 		</div>
 	)

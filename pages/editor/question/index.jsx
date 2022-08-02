@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import { nanoid } from 'nanoid'
 import styles from './style.module.scss'
 import TransitionGroup from '/components/transitionGroup'
+import BottomNav from '/components/bottomNav'
 
 import { uploadImageApi } from '/middleware/request'
 
@@ -196,6 +197,9 @@ function editorSolutionCitePage(props) {
 			    ''
 		    }
 		    <input type="file" multiple ref={inputFilesRef} style={{ display: 'none' }} onChange={() => addImage()}/>
+		    <div className={styles['bottom-nav']}>
+		    	<BottomNav/>
+		    </div>
 		</div>
 	)
 }

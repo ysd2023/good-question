@@ -15,12 +15,14 @@
 	line-height: 1rem;
 	text-align: center;
 	position: relative;
+	font-size: 1.2rem;
 }
 
 .linkactive {
 	padding: 1rem;
 	line-height: 1rem;
 	text-align: center;
-	background-color: orange;
-	color: white;
+	color: orange;
+	font-size: 1.2rem;
+	text-shadow: 5px 5px 3px orange;
 }

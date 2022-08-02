@@ -122,6 +122,15 @@
 	}
 }
 
+.bottom-nav {
+	position: fixed;
+	width: 100%;
+	max-width: 500px;
+	bottom: 0;
+	background-color: white;
+
+}
+
 @keyframes avatarFlash {
     90% {
         left: -10px;
