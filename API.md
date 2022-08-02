@@ -613,15 +613,15 @@ question {
 
 #### 5. 获取发布方案
 
-##### 4.1 接口功能
+##### 5.1 接口功能
 
 - 获取用户发布的解决方案，分页获取
 
-##### 4.2 接口地址(get)
+##### 5.2 接口地址(get)
 
 - `url: '/api/myQuestion'`
 
-##### 4.3 响应数据(`json`)
+##### 5.3 响应数据(`json`)
 
 ```
 {
@@ -635,7 +635,7 @@ question {
 }
 ```
 
-##### 4.4 请求数据（`type [ formData | json]`）
+##### 5.4 请求数据（`type [ formData | json]`）
 
 ```
 {}
@@ -803,11 +803,49 @@ question {
 {
     statu: Boolean //请求状态，true: 请求成功; false: 请求失败
     reason: String //失败理由
-    vaildCode: String //验证码，可选
 }
 ```
 
 ##### 5.4 请求数据(无)
 
 **由session判断**
+
+
+
+---
+
+
+
+#### 6. 找回密码
+
+##### 6.1 接口功能
+
+- 用户重新设置密码
+
+##### 6.2 接口地址（post）
+
+- `url: 'api/reset'`
+
+##### 6.3 响应数据(`json`)
+
+```
+{
+    statu: Boolean //请求状态，true: 请求成功; false: 请求失败
+    reason: String //失败理由
+}
+```
+
+##### 6.4 请求数据(`json`)
+
+```
+{
+    account: String //帐号
+    newPassword: String //新的密码
+    validateCode: String //验证码
+}
+```
+
+
+
+
 
