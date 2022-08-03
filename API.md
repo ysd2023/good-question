@@ -644,7 +644,7 @@ question {
 
 ##### 5.2 接口地址(get)
 
-- `url: '/api/myQuestion'`
+- `url: '/api/mySolution'`
 
 ##### 5.3 响应数据(`json`)
 
