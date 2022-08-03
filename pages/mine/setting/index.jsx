@@ -149,6 +149,30 @@ function mineSettingPage(props) {
 export default mineSettingPage
 
 export async function getServerSideProps(context) {
+	if(!context.req.headers.cookie) {
+		return {
+			 	redirect: {
+				 		destination: '/grant'
+			 	}
+		 }
+	}
+	//验证登录状态
+	let resLogin = await axios({
+		method: 'get',
+		url: '/api/auth',
+		headers: { cookie: context.req.headers.cookie }
+	})
+
+
+	//未登录则重定向登录界面
+	if(!resLogin.data.statu) {
+		 return {
+			 	redirect: {
+				 		destination: '/grant'
+			 	}
+		 }
+	}
+
 	//获取个人信息
 	let userInfo = null
 	const resUserInfo = await axios.get('/api/userInfo')

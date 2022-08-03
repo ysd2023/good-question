@@ -208,10 +208,7 @@ export default questionDetailPage
 
 export async function getServerSideProps(context) {
 	const { query } = context
-
-	const res = await fetch('http://localhost:3000/api/getSolution')
-	const data = await res.json()
-
+	
 	//获取问题详情
 	let resQuestion = await axios.get(`/api/detail?questionID=${query.question_id}`)
 	const { question, publisher } = resQuestion.data

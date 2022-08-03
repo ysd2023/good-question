@@ -7,6 +7,7 @@ import styles from './style.module.scss'
 import TransitionGroup from '/components/transitionGroup'
 
 import { uploadImageApi, publishSolutionApi } from '/middleware/request'
+import axios from '/middleware/axios'
 
 const SolutionEditor = dynamic(() => import('/components/solutionEditor'), {
   ssr: false
@@ -217,12 +218,38 @@ function editorSolutionPage(props) {
 export default editorSolutionPage
 
 export async function getServerSideProps(context) {
+	if(!context.req.headers.cookie) {
+		return {
+			 	redirect: {
+				 		destination: '/grant'
+			 	}
+		 }
+	}
+	//验证登录状态
+	let resLogin = await axios({
+		method: 'get',
+		url: '/api/auth',
+		headers: { cookie: context.req.headers.cookie }
+	})
+
+
+	//未登录则重定向登录界面
+	if(!resLogin.data.statu) {
+		 return {
+			 	redirect: {
+				 		destination: '/grant'
+			 	}
+		 }
+	}
+
+	//获取问题详情
 	const { query } = context
 	const { question_id } = query
-	const question = {
-		title: '这是一个问题',
-		summary: '没有什么好描述的'
-	}
+
+	let resQuestion = await axios.get(`/api/detail?questionID=${question_id}`)
+
+	const {question} = resQuestion.data
+
 	return {
 		props: {
 			question_id,

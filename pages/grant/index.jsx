@@ -110,8 +110,8 @@ function grantPage() {
 		        <link rel="icon" href="/favicon.png" />
 		    </Head>
 		    <div className={styles['logo']}>
-		    	<span className={styles['logo-1']}>G</span>
-		    	<span className={styles['logo-2']}>Q</span>
+		    	<span className={styles['logo-1']} onClick={() => router.push({pathname: '/'})}>G</span>
+		    	<span className={styles['logo-2']} onClick={() => router.push({pathname: '/'})}>Q</span>
 		    	<h4>——解决你灵魂深处的困惑——</h4>
 		    </div>
 		    <div className={`${styles['login']} ${ currentMode === 'login' ? '' : styles['container-rotate-out'] }`}>
@@ -120,6 +120,7 @@ function grantPage() {
 		    	<input type="password" placeholder="密码" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)}/>
 		    	<br/>
 	    		<button onClick={() => login()}>登录</button>
+	    		<li><a onClick={() => router.push({pathname: '/grant/find'})}>忘记密码？</a></li>
 		    </div>
 		    <div className={`${styles['register']} ${ currentMode === 'register' ? styles['container-rotate-in'] : '' }`}>
 		    	<input type="text" placeholder="邮箱" value={email} onChange={(e) => setEmail(e.target.value)}/>

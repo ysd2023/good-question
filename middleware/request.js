@@ -139,6 +139,13 @@ function resetApi(data, success, fail) {
 	.catch(err => fail(err))
 }
 
+//登录状态验证
+function authApi(success, fail) {
+	axios.get('/api/auth')
+	.then(res => success(res))
+	.catch(err => fail(err))
+}
+
 export {
 	getSuggestionApi,
 	getQuestionsApi,
@@ -158,5 +165,6 @@ export {
 	loginApi,
 	registerApi,
 	getCodeApi,
-	resetApi
+	resetApi,
+	authApi,
 }

@@ -8,6 +8,7 @@ import TransitionGroup from '/components/transitionGroup'
 import BottomNav from '/components/bottomNav'
 
 import { uploadImageApi, publishQuestionApi } from '/middleware/request'
+import axios from '/middleware/axios'
 
 const SolutionEditor = dynamic(() => import('/components/solutionEditor'), {
   ssr: false
@@ -324,6 +325,30 @@ function editorSolutionCitePage(props) {
 export default editorSolutionCitePage
 
 export async function getServerSideProps(context) {
+	if(!context.req.headers.cookie) {
+		return {
+			 	redirect: {
+				 		destination: '/grant'
+			 	}
+		 }
+	}
+	//验证登录状态
+	let resLogin = await axios({
+		method: 'get',
+		url: '/api/auth',
+		headers: { cookie: context.req.headers.cookie }
+	})
+
+
+	//未登录则重定向登录界面
+	if(!resLogin.data.statu) {
+		 return {
+			 	redirect: {
+				 		destination: '/grant'
+			 	}
+		 }
+	}
+		
 
 	return {
 		props: {}

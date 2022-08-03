@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
-import { getCommentApi, publishCommentApi } from '/middleware/request'
+import { useRouter } from 'next/router'
+import { getCommentApi, publishCommentApi, authApi } from '/middleware/request'
 import styles from './style.module.scss'
 
 
 function CommentAreaComponent(props) {
+	//定义路由
+	const router = useRouter()
+
 	//定义评论列表
 	const [commentList, setCommentList] = useState([])
 
@@ -45,6 +49,20 @@ function CommentAreaComponent(props) {
 		setIsWriting(true)
 	}
 
+	useEffect(() => {
+		if(isWriting) {
+			authApi((res) => {
+				if(!res.data.statu) {
+					//若未登录
+					let result = confirm('发布评论需要登录，是否跳转登录？')
+					//跳转登录界面，否则关闭评论框
+					if(result) router.push({pathname: '/grant'})
+					else setIsWriting(false)
+				}
+			}, (err) => { alert('网络错误'); setIsWriting(false); })
+		}
+	})
+
 	//定义完成状态
 	const [isCompleted, setIsCompleted] = useState(false)
 	//定义加载状态
@@ -54,8 +72,13 @@ function CommentAreaComponent(props) {
 	const addComment = () => {
 		setIsLoading(true)
 		getCommentApi({ solutionID: props.solutionID, page: currentPage }, ({data}) => {
+			if(data.commentList.length === 0) {
+				setIsCompleted(true)
+				setIsLoading(false)
+				return ;
+			}
 			setCommentList([...commentList, ...data.commentList])
-			setIsLoading(false)
+			
 		}, (err) => { console.log(err) })
 	}
 
