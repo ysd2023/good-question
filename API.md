@@ -99,10 +99,8 @@ question {
     questionID: Number //问题索引
     title: String //问题的标题
     summary: String //对问题的简单描述，可选
-<<<<<<< HEAD
     imageDescription: Array<image[url]> //问题的图像描述,可选
     tag: Array<String> //问题所属标签
-=======
     solutionNum: Number //该解决方案的个数
     imageDescirption: Array<image[url]> //问题的图像描述,可选
     publisher: Object //发起问题的人的信息
@@ -111,7 +109,6 @@ question {
 tag {
     tagID: Number //标签索引
     context: String //标签内容
->>>>>>> 950d7cf (接口请求数据完善)
 }
 ```
 
@@ -202,7 +199,7 @@ resolver {
 
 ```
 {
-    commentorList: Array<{
+    commentList: Array<{
         commentID: Number //评论索引
         commentor: Object //评论者相关信息
         content: String //评论内容
@@ -417,6 +414,34 @@ commentor {
     keyword: String //用户输入的关键字
 }
 ```
+
+
+
+---
+
+
+
+#### 11.获取标签页
+
+##### 11.1 接口功能
+
+- 获取首页的分类标签
+
+##### 11.2 接口地址（get）
+
+- `url: '/api/getTab'`
+
+##### 11.3 响应数据(`json`)
+
+```
+{
+    tabs: Array<String> //分类标签的数组
+}
+```
+
+##### 11.4 请求数据(无)
+
+
 
 
 
