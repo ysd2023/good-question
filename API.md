@@ -484,7 +484,7 @@ question {
     title: String //问题的标题
     summary: String //对问题的简单描述，可选
     cover: image[url] //问题的图像封面链接，可选
-    publisher: Object //发起问题的人的信息
+    imageDescription: Array<image[url]> //问题的图像描述,可选
     type: String //问题分类
     tag: String //问题所属标签
 },
@@ -667,6 +667,40 @@ question {
 ```
 
 **需要补充**
+
+
+
+---
+
+
+
+#### 6. 修改密码
+
+##### 6.1 接口功能
+
+- 用户修改密码
+
+##### 6.2 接口地址(post)
+
+- `url: '/api/updatePassword'`
+
+##### 6.3 响应数据(`json`)
+
+```
+{
+    statu: Boolean //请求结果 true: 修改成功, false: 修改失败
+    reason: String //失败理由
+}
+```
+
+##### 6.4 请求数据（`type [ formData | json]`）
+
+```
+{
+    oldPassword: String //旧密码
+    newPassword: String //新密码
+}
+```
 
 
 
