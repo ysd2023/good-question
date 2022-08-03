@@ -7,7 +7,7 @@ import styles from './style.module.scss'
 import TransitionGroup from '/components/transitionGroup'
 import BottomNav from '/components/bottomNav'
 
-import { uploadImageApi } from '/middleware/request'
+import { uploadImageApi, publishQuestionApi } from '/middleware/request'
 
 const SolutionEditor = dynamic(() => import('/components/solutionEditor'), {
   ssr: false
@@ -77,13 +77,20 @@ function editorSolutionCitePage(props) {
 	//定义发布界面的可见性
 	const [isPublishing, setIsPublishing] = useState(false)
 
+	//定义问题图片描述
+	const [imageDescription, setImageDescription] = useState([])
+
 	//定义发布事件
 	const publish = () => {
 		if(textContent === '<p><br></p>' || questionTitle === '') {
 			alert('文本内容或标题不可为空')
 			return;
+		} else if(questionType === '') {
+			alert('问题分类不可为空')
+			return;
 		}
 		//打开发布界面
+		setPublishStatus('normal')
 		setProgress(0)
 		setIsPublishing(true)
 		//定义promise数组
@@ -98,27 +105,52 @@ function editorSolutionCitePage(props) {
 				}, (err) => { resolve({errno: 1}) })
 			}))
 		})
-		//合并图片url和文本内容，并上传
+		//合并图片url，并上传
 		Promise.all(imagePromise).then(res => {
 			let uploadSuccessImageNum = res.filter(item => item.errno === 0).length
 			setProgress(9)
 			setTimeout(() => {
 				let finalContent = textContent
+				imageDescription.splice(0)
 				res.map(image => {
 					if(image.errno === 0) {
-						finalContent += `<img src="${image.data.url}" alt="${image.data.alt}"/>`
+						imageDescription.push(image.data.url)
 					} else {
-						finalContent += '<img src="#####" alt="图片损坏"/>'
+						imageDescription.push('#####')
 					}
 			  })
+			  setImageDescription([...imageDescription])
 			  setFinalContents(finalContent)
 			  setProgress(9 + uploadSuccessImageNum * 9)
 				//延迟上传
 				setTimeout(() => {
-					console.log(finalContents)
-					// setProgress(100)
-					// setPublishStatus('success')
-					setPublishStatus('error')
+					let coverImage = new FormData()
+					coverImage.append('upload-image', coverRef.current.files[0])
+					uploadImageApi(coverImage, (res) => {
+						let coverImageUrl = '####'
+						if(res.data.errno ===  0) {
+							//封面上传成功
+							coverImageUrl = res.data.data.url
+						}
+						setProgress(progress => progress + 5)
+						publishQuestionApi({
+							title: questionTitle,
+							summary: finalContent,
+							cover: coverImageUrl,
+							imageDescription,
+							type: questionType,
+							tag: tagSet ? tagSet : '无',
+						}, (res) => {
+							//发布成功
+							//若发布成功
+							if(res.data.statu) {
+								setProgress(100)
+								setPublishStatus('success')
+							} else {
+								setPublishStatus('error')
+							}
+						}, (err) => { alert('网络错误');setPublishStatus('error'); })
+					}, (err) => { alert('网络错误');setPublishStatus('error'); })
 				}, 2000)
 			}, 2000)
 		})
@@ -129,12 +161,41 @@ function editorSolutionCitePage(props) {
 		setPublishStatus('normal')
 		//延迟上传
 		setTimeout(() => {
-			console.log(questionTitle)
-			console.log(finalContents)
-			setProgress(100)
-			setPublishStatus('success')
-			// setPublishStatus('error')
+			let coverImage = new FormData()
+			coverImage.append('upload-image', coverRef.current.files[0])
+			uploadImageApi(coverImage, (res) => {
+				let coverImageUrl = '####'
+				if(res.data.errno ===  0) {
+					//封面上传成功
+					coverImageUrl = res.data.data.url
+				}
+				console.log('sdf')
+
+				publishQuestionApi({
+					title: questionTitle,
+					summary: finalContents,
+					cover: coverImageUrl,
+					imageDescription,
+					type: questionType,
+					tag: tagSet,
+				}, (res) => {
+					//发布成功
+					//若发布成功
+					if(res.data.statu) {
+						setProgress(100)
+						setPublishStatus('success')
+					} else {
+						setPublishStatus('error')
+					}
+				}, (err) => { alert('网络错误');setPublishStatus('error'); })
+
+			}, (err) => { alert('网络错误');setPublishStatus('error'); })
 		}, 2000)
+	}
+
+	//定义取消发布事件
+	const cancelPublish = () => {
+		setIsPublishing(false)
 	}
 
 	/*
@@ -154,6 +215,11 @@ function editorSolutionCitePage(props) {
 	//定义标签
 	const [tagSet, setTagSet] = useState('')
 
+	//定义更改封面事件
+	const changeCoverUrl = () => {
+		setCoverUrl(window.URL.createObjectURL(coverRef.current.files[0]))
+	}
+
 
 	return (
 		<div>
@@ -169,8 +235,8 @@ function editorSolutionCitePage(props) {
 		    </div>
 		    <div className={styles['additional-container']}>
 			    <h5>封面选择</h5>
-		    	<section className={styles['cover-container']}>
-			    	<input type="file" ref={coverRef}/>
+		    	<section className={styles['cover-container']} onClick={() => coverRef.current.click()}>
+			    	<input type="file" ref={coverRef} onChange={() => changeCoverUrl()}/>
 		    		{
 		    			coverUrl === ''
 		    			?
@@ -237,6 +303,9 @@ function editorSolutionCitePage(props) {
 			    	errorSlot={
 			    		<div className={styles['success-container']}>
 			    			<button onClick={() => rePublish()} className={styles['success-btn']}>重新上传</button>
+			    			<br/>
+			    			<br/>
+			    			<button onClick={() => cancelPublish()} className={styles['success-btn']}>取消</button>
 			    		</div>
 			    	}
 			    	/>

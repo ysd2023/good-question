@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getCommentApi } from '/middleware/request'
+import { getCommentApi, publishCommentApi } from '/middleware/request'
 import styles from './style.module.scss'
 
 
@@ -59,6 +59,18 @@ function CommentAreaComponent(props) {
 		}, (err) => { console.log(err) })
 	}
 
+	//发布评论
+	const publishComment = () => {
+		//若评论内容不为空，则允许发布
+		if(commentContent !== '') {
+			publishCommentApi({content: commentContent, replyTarget: replyTarget.slice(1)}, (res) => {
+				//请求成功
+				if(res.data.statu) { alert('评论成功') }
+				else { alert(res.data.reason) }
+			}, (err) => { alert('网络错误') })
+		}
+	}
+
 	return (
 		<div className={styles['comment-container-all']}>
 			<h3 className={styles['comment-title-tip']}>评论区</h3>
@@ -108,7 +120,7 @@ function CommentAreaComponent(props) {
 					<div className={styles['comment-writing-area']}>
 						<div className={styles['comment-writing-overlay']} onClick={() => cancleEditor()}></div>
 						<div className={styles['comment-writing-content']}>
-							<button>
+							<button onClick={() => publishComment()}>
 								<svg t="1659084866063" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5633" width="200" height="200"><path d="M0 0h1024v1024H0z" fill="#1296db" fillOpacity=".01" p-id="5634"></path><path d="M893.44 75.849143L99.693714 466.432a36.571429 36.571429 0 0 0-4.681143 62.829714l183.369143 126.756572c15.798857 7.899429 31.524571 7.899429 47.323429-7.899429l434.102857-370.980571-378.88 402.505143c-7.826286 7.899429-7.826286 15.798857-7.826286 23.698285v173.641143c0 15.798857 7.899429 31.597714 23.625143 39.497143 15.798857 7.899429 31.597714 0 39.497143-7.899429l86.820571-88.429714 192.073143 128.146286a36.571429 36.571429 0 0 0 56.027429-22.674286L945.298286 116.297143a36.571429 36.571429 0 0 0-51.931429-40.521143z" fill="#1296db" p-id="5635"></path></svg>
 							</button>
 							<button onClick={() => cancleEditor()}>

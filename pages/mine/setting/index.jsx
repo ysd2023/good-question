@@ -1,8 +1,15 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { useState, useRef, useEffect } from 'react'
 import styles from './style.module.scss'
 
+import { updateUserApi, updatePasswordApi, quitApi } from '/middleware/request'
+import axios from '/middleware/axios'
+
 function mineSettingPage(props) {
+	//定义路由
+	const router = useRouter()
+
 	//定义密码修改框的可见性
 	const [passwordVisibility, setPasswordVisibility] = useState(false)
 
@@ -10,22 +17,25 @@ function mineSettingPage(props) {
 	const imageRef = useRef()
 
 	//定义头像链接
-	const [imageUrl, setImageUrl] = useState('')
+	const [imageUrl, setImageUrl] = useState(props.userInfo.avatar)
 
 	//定义昵称
-	const [nickName, setNickName] = useState('')
+	const [nickName, setNickName] = useState(props.userInfo.nickName)
 
 	//定义现有昵称
-	const [currentNickName, setCurrentNickName] = useState('')
+	const [currentNickName, setCurrentNickName] = useState(props.userInfo.nickName)
 
 	//定义账号
-	const [account, setAccount] = useState('')
+	const [account, setAccount] = useState(props.userInfo.account)
 
 	//定义更改头像事件
 	const updateImage = () => {
 		let result = confirm('确实要更换头像吗？')
 		if(result) {
-			setImageUrl(window.URL.createObjectURL(imageRef.current.files[0]))
+			updateUserApi({avatar: imageRef.current.files[0], nickName: null}, (res) => {
+				if(res.data.statu) setImageUrl(window.URL.createObjectURL(imageRef.current.files[0]))
+				else { alert(res.data.reason) }
+			})
 		}
 	}
 
@@ -34,7 +44,13 @@ function mineSettingPage(props) {
 		if(nickName !== currentNickName) {
 			let result = confirm('确实要更换昵称吗？')
 			if(result) {
-				setCurrentNickName(nickName)
+				updateUserApi({avatar: null, nickName}, (res) => {
+					if(res.data.statu) setCurrentNickName(nickName)
+					else { 
+						setNickName(currentNickName)
+						alert(res.data.reason) 
+					}
+				})
 			} else {
 				setNickName(currentNickName)
 			}
@@ -59,23 +75,28 @@ function mineSettingPage(props) {
 		else if (newPassword === '') { alert('新密码不可为空') }
 		else if (oldPassword === '') { alert('旧密码不可为空') }
 		else {
-			console.log(oldPassword, newPassword, secondPassword)
-			alert('修改密码成功')
-			setPasswordVisibility(false)
+			setPasswordVisibility(true)
+			updatePasswordApi({oldPassword, newPassword}, (res) => {
+				if(res.data.statu) alert('修改密码成功')
+				else alert('修改密码失败')
+				setPasswordVisibility(false)
+			}, (err) => {
+				alert('网络错误')
+			})
 		}
 	}
 
 	//定义退出登录事件
 	const quit = () => {
-		console.log('退出成功')
+		quitApi((res) => {
+			if(res.data.statu) {
+				alert('退出登录成功')
+				router.push({pathname: '/grant'})
+			} else {
+				alert('退出登录失败')
+			}
+		}, (err) => { alert('网络错误') })
 	}
-
-	useEffect(() => {
-		setNickName('樱木花道')
-		setCurrentNickName('樱木花道')
-		setAccount('123123@qq.com')
-		setImageUrl('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202102%2F26%2F20210226143822_d462c.thumb.1000_0.png&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1661932100&t=72ff4afb2faa87ed9deb2d6cb1428e66')
-	}, [])
 
 	return (
 		<div>
@@ -126,3 +147,18 @@ function mineSettingPage(props) {
 }
 
 export default mineSettingPage
+
+export async function getServerSideProps(context) {
+	//获取个人信息
+	let userInfo = null
+	const resUserInfo = await axios.get('/api/userInfo')
+	if(resUserInfo.data) {
+		userInfo = resUserInfo.data
+	}
+
+	return {
+		props: {
+			userInfo
+		}
+	}
+}

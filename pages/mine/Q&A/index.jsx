@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import DropDownContainer from '/components/dropDownContainer'
 import styles from './style.module.scss'
 
+import { userQuestionApi, userSolutionApi } from '/middleware/request'
+
 function mineQandAPage() {
 	//定义问题列表
 	const [questionList, setQuestionList] = useState([])
@@ -11,27 +13,20 @@ function mineQandAPage() {
 	const [solutionList, setSolutionList] = useState([])
 
 	useEffect(() => {
-		for(let item of 'qwerty') {
-			questionList.push({
-				title: '这是你发布的问题',
-				summary: '是的，这是你发布的问题',
-				date: '2022-2-22',
-				questionID: item + Date.now()
-			})
-		}
-		setQuestionList([...questionList])
-
-		for(let item of 'qwerty') {
-			solutionList.push({
-				title: '这是你发布的问题',
-				summary: '是的，这是你发布的问题',
-				solution: '这是万中无一的解决方案，信我，保你长生，永垂不朽，你先这样，在那样，最后这样，就可以了<img src="https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA107bQo.img?w=640&h=236&m=6"/><img src="https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA107bQm.img?w=640&h=269&m=6"/>',
-				date: '2022-2-22',
-				questionID: item + Date.now()
-			})
-		}
-
-		setSolutionList([...solutionList])
+		userSolutionApi((res) => {
+			if(res.data) {
+				setSolutionList([...res.data.solutionList])
+			} else {
+				alert('网络错误，请刷新页面')
+			}
+		}, (err) => {console.log(err)})
+		userQuestionApi((res) => {
+			if(res.data) {
+				setQuestionList([...res.data.questionList])
+			} else {
+				alert('网络错误，请刷新页面')
+			}
+		}, (err) => {alert('网络错误，请刷新页面')})		
 	}, [])
 
 	return (

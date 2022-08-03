@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 import styles from './style.module.scss'
 import TransitionGroup from '/components/transitionGroup'
 
-import { uploadImageApi } from '/middleware/request'
+import { uploadImageApi, publishSolutionApi } from '/middleware/request'
 
 const SolutionEditor = dynamic(() => import('/components/solutionEditor'), {
   ssr: false
@@ -78,6 +78,7 @@ function editorSolutionCitePage(props) {
 			return;
 		}
 		//打开发布界面
+		setPublishStatus('normal')
 		setProgress(0)
 		setIsPublishing(true)
 		//定义promise数组
@@ -109,10 +110,15 @@ function editorSolutionCitePage(props) {
 			  setProgress(9 + uploadSuccessImageNum * 9)
 				//延迟上传
 				setTimeout(() => {
-					console.log(finalContents)
-					// setProgress(100)
-					// setPublishStatus('success')
-					setPublishStatus('error')
+					publishSolutionApi({citeSolutionID: props.cite_solution_id, content: finalContent}, (res) => {
+							//若发布成功
+							if(res.data.statu) {
+								setProgress(100)
+								setPublishStatus('success')
+							} else {
+								setPublishStatus('error')
+							}
+					}, (err) => { alert('网络错误');setPublishStatus('error'); })
 				}, 2000)
 			}, 2000)
 		})
@@ -123,13 +129,22 @@ function editorSolutionCitePage(props) {
 		setPublishStatus('normal')
 		//延迟上传
 		setTimeout(() => {
-			console.log(finalContents)
-			setProgress(100)
-			setPublishStatus('success')
-			// setPublishStatus('error')
+			publishSolutionApi({citeSolutionID: props.cite_solution_id, content: finalContents}, (res) => {
+					//若发布成功
+					if(res.data.statu) {
+						setProgress(100)
+						setPublishStatus('success')
+					} else {
+						setPublishStatus('error')
+					}
+			}, (err) => { alert('网络错误');setPublishStatus('error'); })
 		}, 2000)
 	}
 
+	//定义取消发布事件
+	const cancelPublish = () => {
+		setIsPublishing(false)
+	}
 
 	return (
 		<div>
@@ -138,7 +153,7 @@ function editorSolutionCitePage(props) {
 		        <link rel="icon" href="/favicon.png" />
 		    </Head>
 		    <div className={styles['question-container']}>
-		    	<h3>{props.question.title + props.question_id}</h3>
+		    	<h3>{props.question.title}</h3>
 		    	<p>{props.question.summary}</p>
 		    	<section>
 			    	<span>引用：</span>
@@ -187,6 +202,9 @@ function editorSolutionCitePage(props) {
 			    	errorSlot={
 			    		<div className={styles['success-container']}>
 			    			<button onClick={() => rePublish()} className={styles['success-btn']}>重新上传</button>
+			    			<br/>
+			    			<br/>
+			    			<button onClick={() => cancelPublish()} className={styles['success-btn']}>取消</button>
 			    		</div>
 			    	}
 			    	/>
@@ -205,7 +223,7 @@ export async function getServerSideProps(context) {
 	const { query } = context
 	const { question_id, cite_solution_id } = query
 	const question = {
-		title: '这是一个问题' + question_id,
+		title: '这是一个问题',
 		summary: '没有什么好描述的'
 	}
 

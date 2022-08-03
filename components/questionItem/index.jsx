@@ -13,8 +13,8 @@ function QuestionItemComponent(props) {
 
 	return (
 		<div className={styles['question-item-container']}>
-			<p className={styles['question-item-title']} onClick={() => { detailTo(props.question.questonID) }}>{props.question.title}</p>
-			<section className={styles['question-item-content']} onClick={() => { detailTo(props.question.questonID) }}>
+			<p className={styles['question-item-title']} onClick={() => { detailTo(props.question.questionID) }}>{props.question.title}</p>
+			<section className={styles['question-item-content']} onClick={() => { detailTo(props.question.questionID) }}>
 				<div className={styles['question-item-summary']}>{props.question.summary}</div>
 				<div className={styles['question-item-cover']}>
 					<img src={props.question.cover} alt="封面"/>
