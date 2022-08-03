@@ -481,12 +481,12 @@ commentor {
     question: Object //发布的问题
 },
 question {
-    questionID: Number //问题索引
     title: String //问题的标题
     summary: String //对问题的简单描述，可选
     cover: image[url] //问题的图像封面链接，可选
     publisher: Object //发起问题的人的信息
-    tag: Array<Object> //问题所属标签
+    type: String //问题分类
+    tag: String //问题所属标签
 },
 ```
 
