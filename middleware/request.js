@@ -2,28 +2,28 @@ import axios from './axios'
 
 //获取联想建议
 function getSuggestionApi(data, success, fail) {
-	axios.get(`/api/suggestion?keyword=${data.keyword}`)
+	axios.get(`/api/suggest?keyword=${data.keyword}`)
 	.then(res => success(res))
 	.catch(err => fail(err))
 }
 
 //获取问题列表
 function getQuestionsApi(data, success, fail) {
-	axios.get(`/api/getQuestions?tag=${data.tag}`)
+	axios.get(`/api/getQuestions`, { params: data })
 	.then(res => success(res))
 	.catch(err => fail(err))
 }
 
 //获取解决方案列表
 function getSolutionApi(data, success, fail) {
-	axios.get(`/api/getSolution`)
+	axios.get(`/api/getSolution?questionID=${data.question_id}`)
 	.then(res => success(res))
 	.catch(err => fail(err))
 }
 
 //获取评论
 function getCommentApi(data, success, fail) {
-	axios.get(`/api/getComment`)
+	axios.get(`/api/getComment?solutionID=${data.solutionID}&page=${data.page}`)
 	.then(res => success(res))
 	.catch(err => fail(err))
 }
@@ -34,10 +34,15 @@ function uploadImageApi(data, success, fail) {
 	.catch(err => fail(err))
 }
 
+function getTabsApi() {
+	return axios.get('/api/getTab')
+}
+
 export {
 	getSuggestionApi,
 	getQuestionsApi,
 	getSolutionApi,
 	getCommentApi,
-	uploadImageApi
+	uploadImageApi,
+	getTabsApi,
 }

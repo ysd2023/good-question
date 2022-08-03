@@ -16,36 +16,66 @@ function QuestionContainerComponent(props) {
 	//定义加载状态
 	const [isLoading, setIsLoading] = useState(true)
 	//定义标签和初始化状态
-	const { tab, keyword } = useSelector(state => state)
+	let { tab, tabIndex } = useSelector(state => state)
+	//定义当前页数
+	const [currentPage, setCurrentPage] = mode === 'tab' ? useState(0) : useState(props.page)
 
 	useEffect(() => {
 		if(tab !== '') {
+			//设置加载状态
+			setIsCompleted(false)
 			setIsLoading(true)
 			setQuestionList([])
-			setTimeout(() => {
-				getQuestionsApi({tag: tab}, ({data}) => {
-					questionList.splice(0)
+			//获取问题列表
+			getQuestionsApi({tag: {id:tabIndex, context:tab}, page: currentPage}, ({data}) => {
+				questionList.splice(0)
+				//若返回列表为空，则将加载状态设置为完成
+				if(data.questionList.length === 0) {
+					setISCompleted(true)
+					setIsLoading(false)
+				} else {
+					//否则将问题加进列表
 					data.questionList.map(item => questionList.push(item))
 					setQuestionList([...questionList])
 					setIsLoading(false)
-				}, () => { setIsLoading(false) })
-			}, 1000)
+					setCurrentPage(currentPage => currentPage +1)
+				}
+			}, () => { setIsLoading(false) })
 		}
-	}, [tab])
+	}, [tab, tabIndex])
 
 	//定义增加问题列表事件
 	const addQuestion = () => {
-		if(mode == 'tab') console.log(tab)
-		else console.log(keyword)
+		//设置加载状态
+		setIsCompleted(false)
 		setIsLoading(true)
-		setTimeout(() => {
-			const newList = Array.from(new Array(10).keys())
-			newList.map(item => {
-				questionList.push(Date.now() + item)
-			})
-			setQuestionList([...questionList])
-			setIsLoading(false)
-		}, 800)
+		let queryData = null
+
+		if(mode === 'tab') {
+			queryData = {
+				page: currentPage,
+				tag: {id: tabIndex, context: tab}
+			}
+		} else {
+			queryData = {
+				page: currentPage,
+				summary: props.keyword
+			}
+		}
+		//获取问题列表
+		getQuestionsApi(queryData, ({data}) => {
+			//若返回列表为空，则将加载状态设置为完成
+			if(data.questionList.length === 0) {
+				setISCompleted(true)
+				setIsLoading(false)
+			} else {
+				//否则将问题加进列表
+				data.questionList.map(item => questionList.push(item))
+				setQuestionList([...questionList])
+				setIsLoading(false)
+				setCurrentPage(currentPage => currentPage +1)
+			}
+		}, () => { setIsLoading(false) })
 	}
 
 	/*
@@ -58,23 +88,21 @@ function QuestionContainerComponent(props) {
 		const { scrollTop, scrollHeight, clientHeight } = e.target
 		let distance = scrollHeight - scrollTop - clientHeight
 		if(distance <= 1 && distance >= -1) {
-			console.log('到底了')
 			addQuestion()
 		}
 	}
 		
 	//添加滚动监听
 	useEffect(() => {
-		// if(mode == 'search') setQuestionList([...props.questionList])
 		questionContainerRef.current.addEventListener('scroll', handleScroll)
 		return () => {
 			if(questionContainerRef.current) questionContainerRef.current.removeEventListener('scroll', handleScroll)
 		}
-	}, [])
+	}, [tab, tabIndex])
 
 	return (
 		<div className={styles['question-container']} ref={questionContainerRef}>
-			{questionList.map(item => <QuestionItem key={item}/>)}
+			{questionList.map(item => <QuestionItem key={item.questionID} question={item}/>)}
 			{
 				isCompleted
 				?

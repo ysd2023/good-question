@@ -7,15 +7,18 @@ function CommentAreaComponent(props) {
 	//定义评论列表
 	const [commentList, setCommentList] = useState([])
 
+	//定义当前页数
+	const [currentPage, setCurrentPage] = useState(0)
+
 	//获取评论列表
 	useEffect(() => {
 		getComment()
-		console.log('I change')
-	}, [props.rid])
+		setCurrentPage(0)
+	}, [props.solutionID])
 
 	//定义获取评论事件
 	const getComment = () => {
-		getCommentApi({ rid: props.rid }, ({data}) => {
+		getCommentApi({ solutionID: props.solutionID, page: currentPage }, ({data}) => {
 			commentList.splice(0)
 			setCommentList([...data.commentList])
 		}, (err) => { console.log(err) })
@@ -50,7 +53,7 @@ function CommentAreaComponent(props) {
 	//定义获取新的评论
 	const addComment = () => {
 		setIsLoading(true)
-		getCommentApi({ rid: props.rid }, ({data}) => {
+		getCommentApi({ solutionID: props.solutionID, page: currentPage }, ({data}) => {
 			setCommentList([...commentList, ...data.commentList])
 			setIsLoading(false)
 		}, (err) => { console.log(err) })

@@ -12,6 +12,8 @@ import Tabs from '/components/tabs'
 import QuestionContainer from '/components/questionContainer'
 import BottomNav from '/components/bottomNav'
 
+import { getTabsApi } from '/middleware/request'
+
 export default function Home(props) {
   //定义标签数组
   const { tabList } = props
@@ -46,14 +48,11 @@ export default function Home(props) {
 
 //定义服务端渲染函数
 export async function getServerSideProps(context) {
-    const tabList = []
-    for (let i = 0; i < 10; i++) {
-        tabList.push('分类' + i)
-    }
+    let resTabs = await getTabsApi()
 
     return {
         props: {
-            tabList
+            tabList: resTabs.data.tabs
         }
     }
 }

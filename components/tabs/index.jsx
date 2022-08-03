@@ -36,7 +36,7 @@ function TabsComponent(props) {
     
     //为dom元素添加监听事件
 	useEffect(() => {
-		changeTabName(createAction('change', tabList[0]))
+		changeTabName(createAction('change', {tab:tabList[0], tabIndex: 0}))
 		indexesRef.current.addEventListener('scroll', onTabsScroll)
 
 		return () => {
@@ -71,7 +71,7 @@ function TabsComponent(props) {
 		setCurrentTab(tabIndex)
 		tabsStyles[tabIndex] = true
 		setTabsStyles([...tabsStyles])
-		changeTabName(createAction('change', tabName))
+		changeTabName(createAction('change', {tab: tabName, tabIndex}))
 	}
 
 	/*

@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { getSolutionApi } from '/middleware/request'
 import styles from './style.module.scss'
 import CommentArea from '/components/commentArea'
+import axios from '/middleware/axios'
 
 function questionDetailPage(props) {
 	//解构 发布者、问题、解决方案
@@ -24,6 +25,9 @@ function questionDetailPage(props) {
 	//定义并初始化解决方案的索引
 	const [currentIndex, setCurrentIndex] = useState(0)
 
+	//定义当前页面
+	const [currentPage, setCurrentPage] = useState(1)
+
 	//定义解决方案切换事件 'up': '上一个解决方案', 'down': '下一个解决方案'
 	const changeSolution = (direction) => {
 		if(direction === 'up') {
@@ -39,7 +43,7 @@ function questionDetailPage(props) {
 			//将当前解决方案更改为下一个
 			if(currentIndex === (solutionList.length - 1)) {
 				//若当前为最后一个方案，则请求新的方案
-				getSolutionApi(null, ({data}) => {
+				getSolutionApi({question_id: props.question_id}, ({data}) => {
 					if(data.solutionList.length === 0) {
 						//返回列表为空，显示已加载完成
 						alert('已加载所有方案')
@@ -48,6 +52,7 @@ function questionDetailPage(props) {
 						console.log(data.solutionList)
 						setSolutionList(solutionList.concat(data.solutionList))
 						setCurrentIndex(currentIndex + 1)
+						setCurrentPage(currentPage + 1)
 					}
 				})
 			} else {
@@ -129,7 +134,7 @@ function questionDetailPage(props) {
 		    	<button onClick={() => router.push({ pathname: `/editor/solution/${props.question_id}` })}>
 		    		<svg t="1658995852328" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8504" width="200" height="200"><path d="M112.5 650l542.4-542.4c10.3-10.3 24.1-16 38.9-16s28.6 5.7 38.9 16l183.8 183.8c10.3 10.3 16 24.1 16 38.9s-5.7 28.6-16 38.9L374.1 911.6 112.5 650z" fill="#FFCC72" p-id="8505"></path><path d="M693.7 116.6c8.1 0 15.6 3.1 21.2 8.7l183.8 183.8c5.6 5.6 8.7 13.1 8.7 21.2s-3.1 15.6-8.7 21.2L374.1 876.3 147.8 650l524.7-524.7c5.6-5.6 13.2-8.7 21.2-8.7m0-50c-20.5 0-41 7.8-56.6 23.3l-560 560 297 297 560-560c31.1-31.1 31.1-82 0-113.1L750.3 90c-15.6-15.6-36.1-23.4-56.6-23.4z" fill="#3A3644" p-id="8506"></path><path d="M557.3 205.2l97.6-97.6c10.3-10.3 24.1-16 38.9-16s28.6 5.7 38.9 16l183.8 183.8c10.3 10.3 16 24.1 16 38.9 0 14.8-5.7 28.6-16 38.9l-97.6 97.6-261.6-261.6z" fill="#F95360" p-id="8507"></path><path d="M693.7 116.6c8.1 0 15.6 3.1 21.2 8.7l183.8 183.8c5.6 5.6 8.7 13.1 8.7 21.2s-3.1 15.6-8.7 21.2l-79.9 79.9-226.2-226.2 79.9-79.9c5.6-5.6 13.2-8.7 21.2-8.7m0-50c-20.5 0-41 7.8-56.6 23.3L521.9 205.2l297 297L934.1 387c31.1-31.1 31.1-82 0-113.1L750.3 90c-15.6-15.6-36.1-23.4-56.6-23.4z" fill="#3A3644" p-id="8508"></path><path d="M582 265.3l35.4 35.4-409.2 409.2-35.4-35.4L582 265.3zM243.5 745.2l35.4 35.4 409.2-409.2-35.4-35.4-409.2 409.2z m479.9-338.4L314.2 815.9l35.4 35.4 409.2-409.2-35.4-35.3z" fill="#ED9D29" p-id="8509"></path><path d="M621.064 176.827L847.336 403.1l-28.284 28.284L592.78 205.111z" fill="#ED3248" p-id="8510"></path><path d="M557.202 240.573l226.272 226.272-28.284 28.284-226.272-226.272z" fill="#A87729" p-id="8511"></path><path d="M101.8 660.7l10.9-10.9 261.2 261.1-11 11-270.5 9.3z" fill="#E5E5E5" p-id="8512"></path><path d="M125.5 697.9l200.2 200.2-207.4 7.1 7.2-207.3m-12.8-83.5L77.1 650 66.5 957.1l307.1-10.6 35.6-35.6-296.5-296.5z" fill="#3A3644" p-id="8513"></path><path d="M95.5 875.8l52.8 52.8-55.3 2.5z" fill="#E5E5E5" p-id="8514"></path><path d="M73.1 818.1l-6.3 139.3 139.3-6.4-133-132.9z" fill="#3A3644" p-id="8515"></path><path d="M326.2 898.4l-168.4 4.3-15-15 117.8-54.9z" fill="#BFBFBF" p-id="8516"></path></svg>
 		    	</button>
-		    	<button onClick={() => router.push({ pathname: `/editor/solution/${props.question_id}/${currentSolution.rid}` })}>
+		    	<button onClick={() => router.push({ pathname: `/editor/solution/${props.question_id}/${currentSolution.solutionID}` })}>
 		    		<svg t="1658995930595" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11739" width="200" height="200"><path d="M277.942857 416.914286h285.257143V204.8H219.428571v51.2h292.571429V365.714286H219.428571v219.428571h292.571429c0 87.771429-7.314286 146.285714-14.628571 168.228572-7.314286 21.942857-36.571429 36.571429-95.085715 36.571428h-73.142857l14.628572 51.2h65.828571c80.457143 0 124.342857-21.942857 131.657143-65.828571 21.942857-36.571429 29.257143-117.028571 29.257143-234.057143h-292.571429V416.914286zM950.857143 0H73.142857C36.571429 0 0 36.571429 0 73.142857v877.714286c0 36.571429 36.571429 73.142857 73.142857 73.142857h877.714286c36.571429 0 73.142857-36.571429 73.142857-73.142857V73.142857c0-36.571429-36.571429-73.142857-73.142857-73.142857z m21.942857 950.857143c0 14.628571-7.314286 21.942857-21.942857 21.942857H73.142857c-14.628571 0-21.942857-7.314286-21.942857-21.942857V73.142857C51.2 58.514286 58.514286 51.2 73.142857 51.2h877.714286c14.628571 0 21.942857 7.314286 21.942857 21.942857v877.714286zM731.428571 848.457143h51.2V175.542857H731.428571v672.914286z" p-id="11740" fill="#f89a5a"></path></svg>
 		    	</button>
 		    	<button onClick={() => { changeSolution('up') }}>
@@ -141,7 +146,7 @@ function questionDetailPage(props) {
 		    </div>
 		    <div className={`${styles['comment-container-default']} ${ commentStatus ? styles['comment-container-open'] : styles['comment-container-close']}`}>
 	    		<div className={styles['comment-area']}>
-	    			<CommentArea rid={currentSolution.rid || 'null'}/>
+	    			<CommentArea solutionID={currentSolution.solutionID || 'null'}/>
 	    		</div>
 		    </div>
 		    <footer className={styles['question-detail-footer']}>
@@ -163,31 +168,21 @@ export default questionDetailPage
 
 export async function getServerSideProps(context) {
 	const { query } = context
-	query.question_id = query.question_id || ''
-	console.log(query.question_id)
-
-	const question = {
-		title: '震惊？震惊！这是有史以来最大的一个问题！',
-		summary: '为什么会有震惊？为什么会有震惊？为什么吸引眼球要使用震惊？',
-		imageDescription: [
-			'https://inews.gtimg.com/newsapp_bt/0/13461437480/1000',
-			'https://inews.gtimg.com/newsapp_bt/0/13461437520/1000'
-		],
-		tag: '社会热点'
-	}
-
-	const publisher = {
-		nickName: '吾名史珍香',
-		avatar: 'https://ts1.cn.mm.bing.net/th?id=OIP-C.x09r5tGxTyGiAchyk-KCjQAAAA&w=204&h=204&c=8&rs=1&qlt=90&o=6&dpr=1.25&pid=3.1&rm=2'
-	}
 
 	const res = await fetch('http://localhost:3000/api/getSolution')
 	const data = await res.json()
 
+	//获取问题详情
+	let resQuestion = await axios.get(`/api/detail?questionID=${query.question_id}`)
+	const { question, publisher} = resQuestion.data
+	if(!question || !publisher) {}
+	//获取解决方案
+	let resSolution = await axios.get(`/api/getSolution?questionID=${query.question_id}`)
+
 	return {
 		props: {
 			question_id: query.question_id,
-			solutions: data,
+			solutions: resSolution.data,
 			question,
 			publisher,
 			solutionNum: 10

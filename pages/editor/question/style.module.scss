@@ -178,3 +178,48 @@
 	background-color: white;
 
 }
+
+.additional-container {
+	h5 {
+		padding: 0.5rem;
+	}
+}
+
+.cover-container {
+	height: 5rem;
+	width: 5rem;
+	
+	svg {
+		position: relative;
+		max-width: 100%;
+		object-fit: contain;
+		max-height: 100%;
+	}
+
+	img {
+		position: relative;
+		max-width: 100%;
+		object-fit: contain;
+		max-height: 100%;
+	}
+
+	input {
+		display: none;
+	}
+}
+
+.tag-container {
+	textarea {
+		font-size: 1rem;
+		margin: 0 1rem;
+		width: 90%;
+		resize: none;
+	}
+}
+
+.classify-container {
+	label {
+		display: block;
+		margin: 1rem;
+	}
+}

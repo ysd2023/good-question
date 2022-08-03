@@ -7,6 +7,8 @@ import styles from './style.module.scss'
 import SearchInput from '/components/searchInput'
 import QuestionContainer from '/components/questionContainer'
 
+import axios from '/middleware/axios'
+
 function questionSearchPage(props) {
 	//定义路由
 	const router = useRouter()
@@ -38,7 +40,7 @@ function questionSearchPage(props) {
 					            </p>
 					    	</div>
 					    	<div className={styles['search-question']}>
-					    		<QuestionContainer mode="search" questionList={props.questionList}/>
+					    		<QuestionContainer mode="search" questionList={props.questionList} keyword={props.keyword}/>
 					    	</div>
 				    	</div>
 				    }
@@ -50,16 +52,24 @@ function questionSearchPage(props) {
 export default questionSearchPage
 
 export async function getServerSideProps(context) {
+	let questionList = []
+	let page = null
 	const { query } = context
 	query.keyword = query.keyword ||  ''
 	query.status = query.status === 'suggest' ? 'suggest' : null
-	const questionList = Array.from(new Array(10).keys())
-
+	if(!query.status) {
+		let resQuestions = await axios.get('/api/getQuestions', { params: {page: 0, summary: query.keyword} })
+		if(resQuestions.data) {
+			questionList = resQuestions.data.questionList
+			page = resQuestions.data.page
+		}
+	}
 	return {
 		props: {
 			keyword: query.keyword,
 			status: query.status,
-			questionList
+			questionList,
+			page
 		}
 	}
 }
