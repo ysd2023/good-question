@@ -1,8 +1,14 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import styles from './style.module.scss'
 
+import { loginApi, registerApi, getCodeApi } from '/middleware/request'
+
 function grantPage() {
+	//定义路由
+	const router = useRouter()
+
 	//定义切换模块
 	const [currentMode, setCurrentMode] = useState('login')
 
@@ -18,7 +24,14 @@ function grantPage() {
 	//定义登录事件
 	const login = () => {
 		if(account !== '' && loginPassword !== '') {
-			alert('登录成功')
+			loginApi({account, password: loginPassword}, (res) => {
+				if(res.data.statu) {
+					alert('登录成功')
+					router.push({ pathname: '/' })
+				} else {
+					alert('登录失败')
+				}
+			}, (err) => { alert('登录失败')})
 		} else {
 			alert('帐号或密码不可为空！')
 		}
@@ -48,12 +61,18 @@ function grantPage() {
 	//定义获取验证码事件
 	const getValidateCode = () => {
 		if(remainingTime == 0) {
-			alert('验证码已发送')
-			setRemainingTime(60)
-			timer = setInterval(() => {
-				setRemainingTime(remainingTime => remainingTime -1)
-			}, 1000)
-			setTimer(timer)
+			if(email.indexOf('@') === -1) { 
+				alert('邮箱格式错误')
+				return ;
+			 }
+			getCodeApi({email: email}, (res) => {
+				alert('验证码已发送')
+				setRemainingTime(60)
+				timer = setInterval(() => {
+					setRemainingTime(remainingTime => remainingTime -1)
+				}, 1000)
+				setTimer(timer)
+			}, (err) => {alert('获取验证码失败')})
 		}
 	}
 
@@ -62,7 +81,7 @@ function grantPage() {
 		if(remainingTime == 0) {
 			clearInterval(timer)
 		}
-	})
+	}, [remainingTime])
 
 	//定义注册事件
 	const register = () => {
@@ -71,10 +90,16 @@ function grantPage() {
 		else if(registerPassword !== confirmPassword) { alert('两次密码不一致') }
 		else if(validateCode === '') { alert('验证码不可为空') }
 		else {
-			alert('注册成功')
-			setAccount(email)
-			setLoginPassword(registerPassword)
-			setCurrentMode('login')
+			registerApi({email, password: registerPassword, validCode: validateCode}, (res) => {
+				if(res.data.statu) {
+					alert('注册成功')
+					setAccount(email)
+					setLoginPassword(registerPassword)
+					setCurrentMode('login')
+				} else {
+					alert('注册失败')
+				}
+			}, (err) => { alert('网络错误') })
 		} 
 	}
 

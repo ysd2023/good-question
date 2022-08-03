@@ -110,6 +110,35 @@ function userSolutionApi(success, fail) {
 	.catch(err => fail(err))
 }
 
+//登录
+function loginApi(data, success, fail) {
+	axios.post('/api/login', {account: data.account, password: data.password})
+	.then(res => success(res))
+	.catch(err => fail(err))
+}
+
+//注册
+function registerApi(data, success, fail) {
+	axios.post('/api/register', {email: data.email, password: data.password, validCode: data.validCode})
+	.then(res => success(res))
+	.catch(err => fail(err))
+}
+
+//获取验证码
+function getCodeApi(data, success, fail) {
+	axios.get(`/api/getCode?email=${data.email}`)
+	.then(res => success(res))
+	.catch(err => fail(err))
+} 
+
+
+//找回密码
+function resetApi(data, success, fail) {
+	axios.post('/api/reset', {account: data.account, newPassword: data.newPassword, validateCode: data.validateCode})
+	.then(res => success(res))
+	.catch(err => fail(err))
+}
+
 export {
 	getSuggestionApi,
 	getQuestionsApi,
@@ -126,4 +155,8 @@ export {
 	quitApi,
 	userQuestionApi,
 	userSolutionApi,
+	loginApi,
+	registerApi,
+	getCodeApi,
+	resetApi
 }

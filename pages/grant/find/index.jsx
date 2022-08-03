@@ -1,8 +1,13 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import styles from './style.module.scss'
 
+import { getCodeApi, resetApi } from '/middleware/request'
+
 function findPage() {
+	//定义路由
+	const router = useRouter()
 	
 	//定义帐号
 	const [email, setEmail] = useState('')
@@ -26,12 +31,18 @@ function findPage() {
 	//定义获取验证码事件
 	const getValidateCode = () => {
 		if(remainingTime == 0) {
-			alert('验证码已发送')
-			setRemainingTime(60)
-			timer = setInterval(() => {
-				setRemainingTime(remainingTime => remainingTime -1)
-			}, 1000)
-			setTimer(timer)
+			if(email.indexOf('@') === -1) { 
+				alert('邮箱格式错误')
+				return ;
+			 }
+			getCodeApi({email: email}, (res) => {
+				alert('验证码已发送')
+				setRemainingTime(60)
+				timer = setInterval(() => {
+					setRemainingTime(remainingTime => remainingTime -1)
+				}, 1000)
+				setTimer(timer)
+			}, (err) => {alert('获取验证码失败')})
 		}
 	}
 
@@ -40,7 +51,7 @@ function findPage() {
 		if(remainingTime == 0) {
 			clearInterval(timer)
 		}
-	})
+	}, [remainingTime])
 
 	//定义注册事件
 	const find = () => {
@@ -49,8 +60,14 @@ function findPage() {
 		else if(password !== confirmPassword) { alert('两次密码不一致') }
 		else if(validateCode === '') { alert('验证码不可为空') }
 		else {
-			alert('设置新密码成功')
-			setEmail(email)
+			resetApi({account: email, newPassword: password, validateCode}, (res) => {
+				//若重置密码成功
+				if(res.data.statu) {
+					alert('设置新密码成功')
+					router.push({pathname: '/grant'}) 
+				}
+				else { alert('设置密码错误') }
+			}, (err) => { alert('网络错误') })
 		} 
 	}
 
