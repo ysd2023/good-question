@@ -802,7 +802,7 @@ question {
 {
     email: String //邮箱
     password: String //密码
-    vaildCode: String //验证码
+    validCode: String //验证码
 }
 ```
 
@@ -828,7 +828,6 @@ question {
 {
     statu: Boolean //获取状态，true: 获取成功; false: 获取失败
     reason: String //失败理由
-    vaildCode: String //验证码，可选
 }
 ```
 
