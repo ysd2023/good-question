@@ -99,10 +99,8 @@ question {
     questionID: Number //问题索引
     title: String //问题的标题
     summary: String //对问题的简单描述，可选
-    imageDescription: Array<image[url]> //问题的图像描述,可选
-    tag: Array<String> //问题所属标签
     solutionNum: Number //该解决方案的个数
-    imageDescirption: Array<image[url]> //问题的图像描述,可选
+    imageDescription: Array<image[url]> //问题的图像描述,可选
     publisher: Object //发起问题的人的信息
     tag: Array<Object> //问题所属标签
 },
