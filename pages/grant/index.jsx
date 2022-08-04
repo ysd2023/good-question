@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import styles from './style.module.scss'
 
 import { loginApi, registerApi, getCodeApi } from '/middleware/request'
+import axios from '/middleware/axios'
 
 function GrantPage() {
 	//定义路由
@@ -146,3 +147,27 @@ function GrantPage() {
 }
 
 export default GrantPage
+
+export async function getServerSideProps(context) {
+	if(context.req.headers.cookie) {
+		//验证登录状态
+		let resLogin = await axios({
+			method: 'get',
+			url: '/api/auth',
+			headers: { cookie: context.req.headers.cookie }
+		})
+
+		//已登录则重定向首页
+		if(resLogin.data.statu) {
+			return {
+				redirect: {
+					destination: '/'
+				}
+			}
+		}
+	}
+	
+	return {
+		props: {}
+	}
+}
