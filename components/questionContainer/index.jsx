@@ -10,7 +10,7 @@ function QuestionContainerComponent(props) {
 	//获取模式属性，tab为首页渲染模式， search为搜索渲染模式
 	const mode = props.mode 
 	//定义问题列表
-	const [questionList, setQuestionList] = mode === 'tab' ? useState([]) : useState(props.questionList)
+	const [questionList, setQuestionList] = useState([]) 
 	//定义完成状态
 	const [isCompleted, setIsCompleted] = useState(false)
 	//定义加载状态
@@ -18,7 +18,14 @@ function QuestionContainerComponent(props) {
 	//定义标签和初始化状态
 	let { tab, tabIndex } = useSelector(state => state)
 	//定义当前页数
-	const [currentPage, setCurrentPage] = mode === 'tab' ? useState(0) : useState(props.page)
+	const [currentPage, setCurrentPage] = useState(0) 
+
+	useEffect(() => {
+		if(mode === 'search') {
+			setQuestionList(props.questionList)
+			setCurrentPage(props.page)
+		}
+	}, [])
 
 	useEffect(() => {
 		if(tab !== '') {

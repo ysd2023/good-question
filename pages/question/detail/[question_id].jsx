@@ -1,12 +1,13 @@
 import Head from 'next/head'
-import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { getSolutionApi, indicateAttitudeApi } from '/middleware/request'
 import styles from './style.module.scss'
 import CommentArea from '/components/commentArea'
 import axios from '/middleware/axios'
 
-function questionDetailPage(props) {
+function QuestionDetailPage(props) {
 	//解构 发布者、问题、解决方案
 	const { publisher, question, solutions } = props
 
@@ -66,7 +67,7 @@ function questionDetailPage(props) {
 		if(solutionList.length !== 0) {
 			setCurrentSolution(solutionList[currentIndex])
 		}
-	}, [currentIndex])
+	}, [currentIndex, solutionList])
 
 
 	/*
@@ -130,7 +131,7 @@ function questionDetailPage(props) {
 		    <h2 className={styles['question-title']}>{question.title}</h2>
 		    <div className={styles['publisher-container']}>
 		    	<span className={styles['question-avatar']}>
-		    		<img src={publisher.avatar} alt="这是头像"/>
+		    		<img alt="图片已损坏" src={publisher.avatar}/>
 		    	</span>
 		    	<span>{publisher.nickName}</span>
 		    </div>
@@ -138,7 +139,7 @@ function questionDetailPage(props) {
 		    	<p className={styles['question-summary']}>{question.summary}</p>
 		    	<section className={styles['question-image']}>
 			    	{
-			    		question.imageDescription.map(item => <div key={item}><img src={item}/></div>)
+			    		question.imageDescription.map(item => <div key={item}><img alt="图片已损坏" src={item}/></div>)
 			    	}
 		    	</section>
 		    </div>
@@ -146,7 +147,7 @@ function questionDetailPage(props) {
 		    <div className={styles['solution-container']}>
 		    	<section className={styles['solution-resolver']}>
 		    		<span className={styles['question-avatar']}>
-		    			<img src={currentSolution.resolver.avatar} alt="这是头像"/>
+		    			<img alt="图片已损坏" src={currentSolution.resolver.avatar}/>
 		    		</span>
 		    		<span>{currentSolution.resolver.nickName}</span>
 		    	</section>
@@ -202,7 +203,7 @@ function questionDetailPage(props) {
 	)
 }
 
-export default questionDetailPage
+export default QuestionDetailPage
 
 export async function getServerSideProps(context) {
 	const { query } = context

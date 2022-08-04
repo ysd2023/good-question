@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { getCommentApi, publishCommentApi, authApi } from '/middleware/request'
 import styles from './style.module.scss'
@@ -110,7 +111,7 @@ function CommentAreaComponent(props) {
 							commentList.map(item => (
 								<li key={item.cid} onClick={() => replyEditor('@' + item.commentor.nickName)}>
 									<div className={styles['commentor-container']}>
-										<span className={styles['commentor-avatar']}><img src={item.commentor.avatar} /></span>
+										<span className={styles['commentor-avatar']}><img alt="图片已损坏" src={item.commentor.avatar} /></span>
 										<span>{item.commentor.nickName}</span>
 									</div>
 									<span>{`${item.replyTarget ? ('@' + item.replyTarget) : ''}`}:</span>

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 import styles from './style.module.scss'
 
 function QuestionItemComponent(props) {
@@ -17,13 +18,13 @@ function QuestionItemComponent(props) {
 			<section className={styles['question-item-content']} onClick={() => { detailTo(props.question.questionID) }}>
 				<div className={styles['question-item-summary']}>{props.question.summary}</div>
 				<div className={styles['question-item-cover']}>
-					<img src={props.question.cover} alt="封面"/>
+					<img alt="图片已损坏" src={props.question.cover}/>
 				</div>
 			</section>
 			<section className={styles['question-item-footer']}>
 				<span className={styles['question-item-tag']}>{props.question.tag.context}</span>
 				<div className={styles['question-item-publisher']}>
-					<img src={props.question.publisher.avatar} alt="头像"/>
+					<img alt="图片已损坏" src={props.question.publisher.avatar}/>
 					<span>{props.question.publisher.nickName}</span>
 				</div>
 			</section>

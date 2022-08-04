@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
@@ -18,7 +19,7 @@ const VerticalProgress = dynamic(() => import ('/components/verticalProgress'), 
 })
 
 
-function editorSolutionPage(props) {
+function EditorSolutionPage(props) {
 	//定义路由
 	const router = useRouter()
 	//定义文本内容
@@ -103,9 +104,9 @@ function editorSolutionPage(props) {
 				let finalContent = textContent
 				res.map(image => {
 					if(image.errno === 0) {
-						finalContent += `<img src="${image.data.url}" alt="${image.data.alt}"/>`
+						finalContent += `<img alt="图片已损坏" src="${image.data.url}" alt="${image.data.alt}"/>`
 					} else {
-						finalContent += '<img src="#####" alt="图片损坏"/>'
+						finalContent += '<img alt="图片已损坏" src="#####" alt="图片损坏"/>'
 					}
 			  })
 			  setFinalContents(finalContent)
@@ -174,7 +175,7 @@ function editorSolutionPage(props) {
 		    			{
 			    			imageList.map((item, index) => (
 			    				<li key={item.id} className="hello">
-				    				<img src={item.dataUrl}/>
+				    				<img alt="图片已损坏" src={item.dataUrl}/>
 				    				<button onClick={() => deleteImage(index)}>
 				    					<svg t="1659160844668" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="17194" width="200" height="200"><path d="M512 0C229.376 0 0 229.376 0 512s229.376 512 512 512 512-229.376 512-512S794.624 0 512 0z m202.24 683.52c10.24 10.24 10.24 26.112 0 36.352s-26.112 10.24-36.352 0l-167.936-167.936-167.424 167.424c-10.24 10.24-26.112 10.24-36.352 0s-10.24-26.112 0-36.352l167.424-167.424-168.96-169.984c-10.24-10.24-10.24-26.112 0-36.352s26.112-10.24 36.352 0l169.472 169.472 169.984-169.984c10.24-10.24 26.112-10.24 36.352 0s10.24 26.112 0 36.352l-169.984 169.984 167.424 168.448z" fill="#CD292A" p-id="17195"></path></svg>
 				    				</button>
@@ -215,7 +216,7 @@ function editorSolutionPage(props) {
 	)
 }
 
-export default editorSolutionPage
+export default EditorSolutionPage
 
 export async function getServerSideProps(context) {
 	if(!context.req.headers.cookie) {

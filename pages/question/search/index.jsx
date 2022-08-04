@@ -9,7 +9,7 @@ import QuestionContainer from '/components/questionContainer'
 
 import axios from '/middleware/axios'
 
-function questionSearchPage(props) {
+function QuestionSearchPage(props) {
 	//定义路由
 	const router = useRouter()
 	//定义问题列表
@@ -49,7 +49,7 @@ function questionSearchPage(props) {
 	)
 }
 
-export default questionSearchPage
+export default QuestionSearchPage
 
 export async function getServerSideProps(context) {
 	let questionList = []

@@ -5,7 +5,7 @@ import styles from './style.module.scss'
 
 import { loginApi, registerApi, getCodeApi } from '/middleware/request'
 
-function grantPage() {
+function GrantPage() {
 	//定义路由
 	const router = useRouter()
 
@@ -81,7 +81,7 @@ function grantPage() {
 		if(remainingTime == 0) {
 			clearInterval(timer)
 		}
-	}, [remainingTime])
+	}, [remainingTime, timer])
 
 	//定义注册事件
 	const register = () => {
@@ -145,4 +145,4 @@ function grantPage() {
 	)
 }
 
-export default grantPage
+export default GrantPage

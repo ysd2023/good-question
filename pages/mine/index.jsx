@@ -1,11 +1,12 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import styles from './style.module.scss'
 import BottomNav from '/components/bottomNav'
 
 import axios from '/middleware/axios'
 
-function minePage(props) {
+function MinePage(props) {
 	//定义路由
 	const router = useRouter()
 
@@ -24,7 +25,7 @@ function minePage(props) {
 		    </div>
 		    <div className={styles['info-container']}>
 		    	<div className={styles['info-avatar']}>
-		    		<img src={userInfo.avatar}/>
+		    		<img alt="图片已损坏" src={userInfo.avatar}/>
 		    	</div>
 		    	<div className={styles['info-person']}>
 		    		<h3>{userInfo.nickName}</h3>
@@ -62,7 +63,7 @@ function minePage(props) {
 	)
 }
 
-export default minePage
+export default MinePage
 
 export async function getServerSideProps(context) {
 	if(!context.req.headers.cookie) {

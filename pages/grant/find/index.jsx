@@ -5,7 +5,7 @@ import styles from './style.module.scss'
 
 import { getCodeApi, resetApi } from '/middleware/request'
 
-function findPage() {
+function FindPage() {
 	//定义路由
 	const router = useRouter()
 	
@@ -51,7 +51,7 @@ function findPage() {
 		if(remainingTime == 0) {
 			clearInterval(timer)
 		}
-	}, [remainingTime])
+	}, [remainingTime, timer])
 
 	//定义注册事件
 	const find = () => {
@@ -96,4 +96,4 @@ function findPage() {
 	)
 }
 
-export default findPage
+export default FindPage

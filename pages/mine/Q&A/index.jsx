@@ -5,7 +5,7 @@ import styles from './style.module.scss'
 
 import { userQuestionApi, userSolutionApi } from '/middleware/request'
 
-function mineQandAPage() {
+function MineQandAPage() {
 	//定义问题列表
 	const [questionList, setQuestionList] = useState([])
 
@@ -66,7 +66,7 @@ function mineQandAPage() {
 	)
 }
 
-export default mineQandAPage
+export default MineQandAPage
 
 export async function getServerSideProps(context) {
 	if(!context.req.headers.cookie) {

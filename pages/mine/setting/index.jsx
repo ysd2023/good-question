@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useState, useRef, useEffect } from 'react'
 import styles from './style.module.scss'
@@ -6,7 +7,7 @@ import styles from './style.module.scss'
 import { updateUserApi, updatePasswordApi, quitApi } from '/middleware/request'
 import axios from '/middleware/axios'
 
-function mineSettingPage(props) {
+function MineSettingPage(props) {
 	//定义路由
 	const router = useRouter()
 
@@ -109,7 +110,7 @@ function mineSettingPage(props) {
 		    		<li>
 		    			<span>头像</span>
 		    			<input type="file" ref={imageRef} style={{ display: 'none' }} onChange={() => updateImage()}/>
-		    			<img onClick={() => imageRef.current.click()} src={imageUrl}/>
+		    			<img alt="图片已损坏" onClick={() => imageRef.current.click()} src={imageUrl}/>
 		    		</li>
 		    		<li>
 		    			<span>账号</span>
@@ -146,7 +147,7 @@ function mineSettingPage(props) {
 	)
 }
 
-export default mineSettingPage
+export default MineSettingPage
 
 export async function getServerSideProps(context) {
 	if(!context.req.headers.cookie) {
