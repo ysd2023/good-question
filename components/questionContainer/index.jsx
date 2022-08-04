@@ -26,21 +26,9 @@ function QuestionContainerComponent(props) {
 			setIsCompleted(false)
 			setIsLoading(true)
 			setQuestionList([])
-			//获取问题列表
-			getQuestionsApi({tag: {id:tabIndex, context:tab}, page: currentPage}, ({data}) => {
-				questionList.splice(0)
-				//若返回列表为空，则将加载状态设置为完成
-				if(data.questionList.length === 0) {
-					setISCompleted(true)
-					setIsLoading(false)
-				} else {
-					//否则将问题加进列表
-					data.questionList.map(item => questionList.push(item))
-					setQuestionList([...questionList])
-					setIsLoading(false)
-					setCurrentPage(currentPage => currentPage +1)
-				}
-			}, () => { setIsLoading(false) })
+			let queryData = {tag: {id:tabIndex, context:tab}, page: currentPage}
+			questionList.splice(0)
+			getMoreQuestion(queryData)
 		}
 	}, [tab, tabIndex])
 
@@ -62,11 +50,18 @@ function QuestionContainerComponent(props) {
 				summary: props.keyword
 			}
 		}
+
+		getMoreQuestion(queryData)
+		
+	}
+
+	//获取问题函数
+	const getMoreQuestion = (queryData) => {
 		//获取问题列表
 		getQuestionsApi(queryData, ({data}) => {
 			//若返回列表为空，则将加载状态设置为完成
 			if(data.questionList.length === 0) {
-				setISCompleted(true)
+				setIsCompleted(true)
 				setIsLoading(false)
 			} else {
 				//否则将问题加进列表

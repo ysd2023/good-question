@@ -123,43 +123,12 @@ function editorSolutionCitePage(props) {
 			  setImageDescription([...imageDescription])
 			  setFinalContents(finalContent)
 			  setProgress(9 + uploadSuccessImageNum * 9)
-				//延迟上传
-				setTimeout(() => {
-					let coverImage = new FormData()
-					coverImage.append('upload-image', coverRef.current.files[0])
-					uploadImageApi(coverImage, (res) => {
-						let coverImageUrl = '####'
-						if(res.data.errno ===  0) {
-							//封面上传成功
-							coverImageUrl = res.data.data.url
-						}
-						setProgress(progress => progress + 5)
-						publishQuestionApi({
-							title: questionTitle,
-							summary: finalContent,
-							cover: coverImageUrl,
-							imageDescription,
-							type: questionType,
-							tag: tagSet ? tagSet : '无',
-						}, (res) => {
-							//发布成功
-							//若发布成功
-							if(res.data.statu) {
-								setProgress(100)
-								setPublishStatus('success')
-							} else {
-								setPublishStatus('error')
-							}
-						}, (err) => { alert('网络错误');setPublishStatus('error'); })
-					}, (err) => { alert('网络错误');setPublishStatus('error'); })
-				}, 2000)
+			  finalUpload()
 			}, 2000)
 		})
 	}
 
-	//定义重新上传事件
-	const rePublish = () => {
-		setPublishStatus('normal')
+	const finalUpload = () => {
 		//延迟上传
 		setTimeout(() => {
 			let coverImage = new FormData()
@@ -170,15 +139,13 @@ function editorSolutionCitePage(props) {
 					//封面上传成功
 					coverImageUrl = res.data.data.url
 				}
-				console.log('sdf')
-
 				publishQuestionApi({
 					title: questionTitle,
 					summary: finalContents,
 					cover: coverImageUrl,
 					imageDescription,
 					type: questionType,
-					tag: tagSet,
+					tag: tagSet ? tagSet : '无',
 				}, (res) => {
 					//发布成功
 					//若发布成功
@@ -189,9 +156,14 @@ function editorSolutionCitePage(props) {
 						setPublishStatus('error')
 					}
 				}, (err) => { alert('网络错误');setPublishStatus('error'); })
-
 			}, (err) => { alert('网络错误');setPublishStatus('error'); })
 		}, 2000)
+	}
+
+	//定义重新上传事件
+	const rePublish = () => {
+		setPublishStatus('normal')
+		finalUpload()
 	}
 
 	//定义取消发布事件
@@ -208,7 +180,7 @@ function editorSolutionCitePage(props) {
 	const coverRef = useRef()
 
 	//定义问题分类列表
-	const [classification, setClassification] = useState(['分类1','分类2','分类3','分类4','分类5'])
+	const [classification, setClassification] = useState(props.tabs)
 
 	//定义发表问题分类
 	const [questionType, setQuestionType] = useState('')
@@ -348,9 +320,14 @@ export async function getServerSideProps(context) {
 			 	}
 		 }
 	}
-		
 
+	//获取问题分类
+	let resTabs = await axios.get('/api/getTab')
+	let tabs = resTabs.data.tabs
+		
 	return {
-		props: {}
+		props: {
+			tabs
+		}
 	}
 }

@@ -78,22 +78,22 @@ function TabsComponent(props) {
 	*标签下拉面板模块
 	*/
 	//定义下拉框的可见性
-	const [panelVisibility, setPanelVisibility] = useState(false)
+	// const [panelVisibility, setPanelVisibility] = useState(false)
 	//判断是否使用默认事件
 	onEditor = onEditor || function() {}
 
-	//处理打开，关闭回调
-	const handleEditor = () => {
-		if(panelVisibility) {
-			//关闭回调
-			console.log('下拉面板关闭了')
-			onEditor()
-			setPanelVisibility(false)
-		} else {
-			console.log('下拉面板打开了')
-			setPanelVisibility(true)
-		}
-	}
+	// //处理打开，关闭回调
+	// const handleEditor = () => {
+	// 	if(panelVisibility) {
+	// 		//关闭回调
+	// 		console.log('下拉面板关闭了')
+	// 		onEditor()
+	// 		setPanelVisibility(false)
+	// 	} else {
+	// 		console.log('下拉面板打开了')
+	// 		setPanelVisibility(true)
+	// 	}
+	// }
 
 	return (
 		<>

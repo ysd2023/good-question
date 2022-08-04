@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import styles from '/styles/index.module.scss'
@@ -7,7 +6,6 @@ import { Provider } from 'react-redux'
 import tabStore from '/redux/store/tabStore'
 
 //引入其他组件
-import SearchInput from '/components/searchInput'
 import Tabs from '/components/tabs'
 import QuestionContainer from '/components/questionContainer'
 import BottomNav from '/components/bottomNav'
