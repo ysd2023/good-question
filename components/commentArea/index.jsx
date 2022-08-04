@@ -22,7 +22,7 @@ function CommentAreaComponent(props) {
 
 	//定义获取评论事件
 	const getComment = () => {
-		getCommentApi({ solutionID: props.solutionID, page: currentPage }, ({data}) => {
+		getCommentApi({ solutionID: props.solutionID, page: currentPage }, ({ data }) => {
 			commentList.splice(0)
 			setCommentList([...data.commentList])
 		}, (err) => { console.log(err) })
@@ -50,13 +50,13 @@ function CommentAreaComponent(props) {
 	}
 
 	useEffect(() => {
-		if(isWriting) {
+		if (isWriting) {
 			authApi((res) => {
-				if(!res.data.statu) {
+				if (!res.data.statu) {
 					//若未登录
 					let result = confirm('发布评论需要登录，是否跳转登录？')
 					//跳转登录界面，否则关闭评论框
-					if(result) router.push({pathname: '/grant'})
+					if (result) router.push({ pathname: '/grant' })
 					else setIsWriting(false)
 				}
 			}, (err) => { alert('网络错误'); setIsWriting(false); })
@@ -71,26 +71,29 @@ function CommentAreaComponent(props) {
 	//定义获取新的评论
 	const addComment = () => {
 		setIsLoading(true)
-		getCommentApi({ solutionID: props.solutionID, page: currentPage }, ({data}) => {
-			if(data.commentList.length === 0) {
+		getCommentApi({ solutionID: props.solutionID, page: currentPage }, ({ data }) => {
+			if (data.commentList.length === 0) {
 				setIsCompleted(true)
 				setIsLoading(false)
-				return ;
+				return;
 			}
 			setCommentList([...commentList, ...data.commentList])
-			
-		}, (err) => { console.log(err) })
+			setIsLoading(false)
+		}, (err) => { console.log(err); setIsLoading(false); })
 	}
 
 	//发布评论
 	const publishComment = () => {
 		//若评论内容不为空，则允许发布
-		if(commentContent !== '') {
-			publishCommentApi({content: commentContent, replyTarget: replyTarget.slice(1)}, (res) => {
+		if (commentContent !== '') {
+			publishCommentApi({ content: commentContent, replyTarget: replyTarget.slice(1) }, (res) => {
 				//请求成功
-				if(res.data.statu) { alert('评论成功') }
+				if (res.data.statu) {
+					alert('评论成功')
+				}
 				else { alert(res.data.reason) }
-			}, (err) => { alert('网络错误') })
+				setIsWriting(false)
+			}, (err) => { alert('网络错误'); setIsWriting(false); })
 		}
 	}
 
@@ -101,62 +104,62 @@ function CommentAreaComponent(props) {
 				<ul>
 					{
 						commentList.length === 0
-						?
-						<li>很遗憾，暂时没有人发表评论</li>
-						:
-						commentList.map(item => (
-							<li key={item.cid} onClick={() => replyEditor('@' + item.commentor.nickName)}>
-								<div className={styles['commentor-container']}>
-									<span className={styles['commentor-avatar']}><img src={item.commentor.avatar}/></span>
-									<span>{item.commentor.nickName}</span>
-								</div>
-								<span>{`${ item.replyTarget ? ('@' + item.replyTarget) : '' }`}:</span>
-								<span>{item.content + item.cid}</span>
-							</li>
-						))
+							?
+							<li>很遗憾，暂时没有人发表评论</li>
+							:
+							commentList.map(item => (
+								<li key={item.cid} onClick={() => replyEditor('@' + item.commentor.nickName)}>
+									<div className={styles['commentor-container']}>
+										<span className={styles['commentor-avatar']}><img src={item.commentor.avatar} /></span>
+										<span>{item.commentor.nickName}</span>
+									</div>
+									<span>{`${item.replyTarget ? ('@' + item.replyTarget) : ''}`}:</span>
+									<span>{item.content + item.cid}</span>
+								</li>
+							))
 					}
 				</ul>
 				{
 					isCompleted
-					?
-					<div className={styles['question-footer']}>
-						<span>已全部加载完成</span>
-						<button>回到顶部</button>
-					</div>
-					:
-					isLoading
-					?
-					<div className={styles['question-footer']}>
-						<span>loading...</span>
-					</div>
-					:
-					<div className={styles['question-footer']}>
-						<button onClick={() => addComment()}>点击</button>
-						<span>加载更多</span>
-					</div>
+						?
+						<div className={styles['question-footer']}>
+							<span>已全部加载完成</span>
+							<button>回到顶部</button>
+						</div>
+						:
+						isLoading
+							?
+							<div className={styles['question-footer']}>
+								<span>loading...</span>
+							</div>
+							:
+							<div className={styles['question-footer']}>
+								<button onClick={() => addComment()}>点击</button>
+								<span>加载更多</span>
+							</div>
 				}
 			</div>
-			<div className={`${ isWriting ? styles['comment-publish-writing'] : styles['comment-publish'] }`}>
+			<div className={`${isWriting ? styles['comment-publish-writing'] : styles['comment-publish']}`}>
 				{
 					isWriting
-					?
-					<div className={styles['comment-writing-area']}>
-						<div className={styles['comment-writing-overlay']} onClick={() => cancleEditor()}></div>
-						<div className={styles['comment-writing-content']}>
-							<button onClick={() => publishComment()}>
-								<svg t="1659084866063" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5633" width="200" height="200"><path d="M0 0h1024v1024H0z" fill="#1296db" fillOpacity=".01" p-id="5634"></path><path d="M893.44 75.849143L99.693714 466.432a36.571429 36.571429 0 0 0-4.681143 62.829714l183.369143 126.756572c15.798857 7.899429 31.524571 7.899429 47.323429-7.899429l434.102857-370.980571-378.88 402.505143c-7.826286 7.899429-7.826286 15.798857-7.826286 23.698285v173.641143c0 15.798857 7.899429 31.597714 23.625143 39.497143 15.798857 7.899429 31.597714 0 39.497143-7.899429l86.820571-88.429714 192.073143 128.146286a36.571429 36.571429 0 0 0 56.027429-22.674286L945.298286 116.297143a36.571429 36.571429 0 0 0-51.931429-40.521143z" fill="#1296db" p-id="5635"></path></svg>
-							</button>
-							<button onClick={() => cancleEditor()}>
-								<svg t="1659084949195" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6970" width="200" height="200"><path d="M512 1024C230.4 1024 0 793.6 0 512S230.4 0 512 0s512 230.4 512 512-230.4 512-512 512z m256-563.2H256v102.4h512V460.8z" fill="#FF7E11" p-id="6971"></path></svg>
-							</button>
-							<textarea placeholder={replyTarget ? replyTarget : '说说你的看法'} maxLength="100" value={commentContent} onChange={(e) => setCommentContent(e.target.value)}/>
+						?
+						<div className={styles['comment-writing-area']}>
+							<div className={styles['comment-writing-overlay']} onClick={() => cancleEditor()}></div>
+							<div className={styles['comment-writing-content']}>
+								<button onClick={() => publishComment()}>
+									<svg t="1659084866063" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5633" width="200" height="200"><path d="M0 0h1024v1024H0z" fill="#1296db" fillOpacity=".01" p-id="5634"></path><path d="M893.44 75.849143L99.693714 466.432a36.571429 36.571429 0 0 0-4.681143 62.829714l183.369143 126.756572c15.798857 7.899429 31.524571 7.899429 47.323429-7.899429l434.102857-370.980571-378.88 402.505143c-7.826286 7.899429-7.826286 15.798857-7.826286 23.698285v173.641143c0 15.798857 7.899429 31.597714 23.625143 39.497143 15.798857 7.899429 31.597714 0 39.497143-7.899429l86.820571-88.429714 192.073143 128.146286a36.571429 36.571429 0 0 0 56.027429-22.674286L945.298286 116.297143a36.571429 36.571429 0 0 0-51.931429-40.521143z" fill="#1296db" p-id="5635"></path></svg>
+								</button>
+								<button onClick={() => cancleEditor()}>
+									<svg t="1659084949195" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6970" width="200" height="200"><path d="M512 1024C230.4 1024 0 793.6 0 512S230.4 0 512 0s512 230.4 512 512-230.4 512-512 512z m256-563.2H256v102.4h512V460.8z" fill="#FF7E11" p-id="6971"></path></svg>
+								</button>
+								<textarea placeholder={replyTarget ? replyTarget : '说说你的看法'} maxLength="100" value={commentContent} onChange={(e) => setCommentContent(e.target.value)} />
+							</div>
 						</div>
-					</div>
-					:
-					<span onClick={() => setIsWriting(true)}>
-						说两句
-						<svg t="1659072618170" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2274" width="200" height="200"><path d="M686.4 224c-6.4-6.4-6.4-16 0-22.4l68-68c6.4-6.4 16-6.4 22.4 0l112.8 112.8c6.4 6.4 6.4 16 0 22.4l-68 68c-6.4 6.4-16 6.4-22.4 0L686.4 224zM384 776l372-372c5.6-5.6 4.8-15.2-1.6-20.8L641.6 269.6c-6.4-6.4-16-7.2-20.8-1.6L248 640l-56 192 192-56zM64 896v64h896v-64H64z" p-id="2275" fill="#8a8a8a"></path></svg>
-					</span>
+						:
+						<span onClick={() => setIsWriting(true)}>
+							说两句
+							<svg t="1659072618170" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2274" width="200" height="200"><path d="M686.4 224c-6.4-6.4-6.4-16 0-22.4l68-68c6.4-6.4 16-6.4 22.4 0l112.8 112.8c6.4 6.4 6.4 16 0 22.4l-68 68c-6.4 6.4-16 6.4-22.4 0L686.4 224zM384 776l372-372c5.6-5.6 4.8-15.2-1.6-20.8L641.6 269.6c-6.4-6.4-16-7.2-20.8-1.6L248 640l-56 192 192-56zM64 896v64h896v-64H64z" p-id="2275" fill="#8a8a8a"></path></svg>
+						</span>
 				}
 			</div>
 		</div>

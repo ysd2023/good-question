@@ -49,7 +49,6 @@ function questionDetailPage(props) {
 						alert('已加载所有方案')
 					} else {
 						//将新的方案列表，添加到后面
-						console.log(data.solutionList)
 						setSolutionList(solutionList.concat(data.solutionList))
 						setCurrentIndex(currentIndex + 1)
 						setCurrentPage(currentPage + 1)
@@ -67,7 +66,6 @@ function questionDetailPage(props) {
 		if(solutionList.length !== 0) {
 			setCurrentSolution(solutionList[currentIndex])
 		}
-		console.log(currentIndex)
 	}, [currentIndex])
 
 
