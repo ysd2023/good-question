@@ -18,13 +18,19 @@ function QuestionItemComponent(props) {
 			<section className={styles['question-item-content']} onClick={() => { detailTo(props.question.questionID) }}>
 				<div className={styles['question-item-summary']}>{props.question.summary}</div>
 				<div className={styles['question-item-cover']}>
-					<img alt="图片已损坏" src={props.question.cover}/>
+					{
+						props.question.cover
+						?
+						<img alt="图片已损坏" src={props.question.cover}/>
+						:
+						''
+					}
 				</div>
 			</section>
 			<section className={styles['question-item-footer']}>
 				<span className={styles['question-item-tag']}>{props.question.tag.context}</span>
 				<div className={styles['question-item-publisher']}>
-					<img alt="图片已损坏" src={props.question.publisher.avatar}/>
+					<img alt="" src={props.question.publisher.avatar}/>
 					<span>{props.question.publisher.nickName}</span>
 				</div>
 			</section>
