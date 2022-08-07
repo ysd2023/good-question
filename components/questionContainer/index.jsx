@@ -33,7 +33,7 @@ function QuestionContainerComponent(props) {
 			setIsCompleted(false)
 			setIsLoading(true)
 			setQuestionList([])
-			let queryData = {tag: {id:tabIndex, context:tab}, page: currentPage}
+			let queryData = {tagID: tabIndex, pageNum: currentPage}
 			questionList.splice(0)
 			getMoreQuestion(queryData)
 		}
@@ -48,12 +48,12 @@ function QuestionContainerComponent(props) {
 
 		if(mode === 'tab') {
 			queryData = {
-				page: currentPage,
-				tag: {id: tabIndex, context: tab}
+				pageNum: currentPage,
+				tagID: tabIndex
 			}
 		} else {
 			queryData = {
-				page: currentPage,
+				pageNum: currentPage,
 				summary: props.keyword
 			}
 		}
@@ -75,7 +75,7 @@ function QuestionContainerComponent(props) {
 				data.questionList.map(item => questionList.push(item))
 				setQuestionList([...questionList])
 				setIsLoading(false)
-				setCurrentPage(currentPage => currentPage +1)
+				setCurrentPage(data.page + 1)
 			}
 		}, () => { setIsLoading(false) })
 	}
@@ -97,10 +97,11 @@ function QuestionContainerComponent(props) {
 	//添加滚动监听
 	useEffect(() => {
 		questionContainerRef.current.addEventListener('scroll', handleScroll)
+		console.log('currentPage has change')
 		return () => {
 			if(questionContainerRef.current) questionContainerRef.current.removeEventListener('scroll', handleScroll)
 		}
-	}, [tab, tabIndex])
+	}, [tab, tabIndex, currentPage])
 
 	return (
 		<div className={styles['question-container']} ref={questionContainerRef}>
