@@ -37,15 +37,11 @@ question {
     summary: String //对问题的简单描述，可选
     cover: image[url] //问题的图像封面链接，可选
     publisher: Object //发起问题的人的信息
-    tag: Array<Object> //问题所属标签
+    tag: Array<String> //问题所属标签,用户自定义
 },
 publisher {
     nickName: String //发起者的昵称
     avatar: image[url] //发起者头像链接
-},
-tag {
-    id: Number //标签索引
-    context: String 标签内容
 }
 ```
 
@@ -54,12 +50,8 @@ tag {
 ```
 {
     summary: String //对请求问题的简单描述，可选
-    page: Number //请求所需页面数据的页码，可选，默认为0
-    tag: Object //请求问题包含的标签，可选
-},
-tag {
-    id: Number //标签索引
-    context: String 标签内容
+    pageNum: Number //请求所需页面数据的页码，可选，默认为0
+    tagID: Number //请求问题包含的标签，可选
 }
 ```
 
