@@ -66,7 +66,7 @@ function FindPage() {
 					alert('设置新密码成功')
 					router.push({pathname: '/grant'}) 
 				}
-				else { alert('设置密码错误') }
+				else { alert(res.data.reason) }
 			}, (err) => { alert('网络错误') })
 		} 
 	}
