@@ -29,13 +29,8 @@ function QuestionContainerComponent(props) {
 
 	useEffect(() => {
 		if(tab !== '') {
-			//设置加载状态
-			setIsCompleted(false)
-			setIsLoading(true)
+			setCurrentPage(0)
 			setQuestionList([])
-			let queryData = {tagID: tabIndex, pageNum: currentPage}
-			questionList.splice(0)
-			getMoreQuestion(queryData)
 		}
 	}, [tab, tabIndex])
 
@@ -64,65 +59,69 @@ function QuestionContainerComponent(props) {
 
 	//获取问题函数
 	const getMoreQuestion = (queryData) => {
-		//获取问题列表
-		getQuestionsApi(queryData, ({data}) => {
-			//若返回列表为空，则将加载状态设置为完成
-			if(data.questionList.length === 0) {
-				setIsCompleted(true)
-				setIsLoading(false)
-			} else {
-				//否则将问题加进列表
-				data.questionList.map(item => questionList.push(item))
-				setQuestionList([...questionList])
-				setIsLoading(false)
-				setCurrentPage(data.page + 1)
-			}
-		}, () => { setIsLoading(false) })
+		//延时发送请求
+		setTimeout(() => {
+			//获取问题列表
+			getQuestionsApi(queryData, ({data}) => {
+				//若返回列表为空，则将加载状态设置为完成
+				if(data.questionList.length === 0) {
+					setIsCompleted(true)
+				} else {
+					//否则将问题加进列表
+					data.questionList.map(item => questionList.push(item))
+					setQuestionList([...questionList])
+					setCurrentPage(() => data.page + 1)
+				}
+			}, () => { setIsLoading(false) })
+		}, 500)
 	}
 
 	/*
 	*下滑加载模块
 	*/
 	//绑定dom元素
-	const questionContainerRef = useRef()
-	//添加滚动处理事件
-	function handleScroll(e) {
-		const { scrollTop, scrollHeight, clientHeight } = e.target
-		let distance = scrollHeight - scrollTop - clientHeight
-		if(distance <= 1 && distance >= -1) {
-			addQuestion()
-		}
-	}
+	const loadingRef = useRef()
 		
-	//添加滚动监听
+	// //添加滚动监听
 	useEffect(() => {
-		questionContainerRef.current.addEventListener('scroll', handleScroll)
-		console.log('currentPage has change')
-		return () => {
-			if(questionContainerRef.current) questionContainerRef.current.removeEventListener('scroll', handleScroll)
+		if(loadingRef.current) {
+			console.log('进入视野前')
+			const IO = new IntersectionObserver((entity, _) => {
+				if(entity[0].isIntersecting) {
+					console.log('进入视野')
+					addQuestion()
+					IO.unobserve(loadingRef.current)
+				}
+			})
+
+			IO.observe(loadingRef.current)
+
+			return () => {
+				IO.disconnect()
+			}
 		}
-	}, [tab, tabIndex, currentPage])
+
+	}, [currentPage])
 
 	return (
-		<div className={styles['question-container']} ref={questionContainerRef}>
+		<div className={styles['question-container']}>
 			{questionList.map(item => <QuestionItem key={item.questionID} question={item}/>)}
 			{
 				isCompleted
 				?
 				<div className={styles['question-footer']}>
 					<span>已全部加载完成</span>
-					<button>回到顶部</button>
 				</div>
 				:
 				isLoading
 				?
-				<div className={styles['question-footer']}>
+				<div className={styles['question-footer']} ref={loadingRef}>
 					<span>loading...</span>
 				</div>
 				:
 				<div className={styles['question-footer']}>
-					<button onClick={() => { addQuestion() }}>点击</button>
-					<span>加载更多</span>
+					<button onClick={() => { addQuestion() }}>重新加载</button>
+					<span>加载失败</span>
 				</div>
 			}
 		</div>
