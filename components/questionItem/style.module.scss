@@ -51,6 +51,27 @@
 
 .question-item-tag {
 	color: #0076ff;
+	font-size: 1rem;
+	position: relative;
+
+	i {
+		display: inline-block;
+		height: 100%;
+		width: 1rem;
+
+		svg {
+			position: relative;
+			height: 100%;
+			width: 100%;
+			vertical-align: middle;
+		}
+	}
+
+	&:hover {
+		.question-item-tag-container {
+			display: inline-block;
+		}
+	}
 }
 
 .question-item-publisher {
@@ -64,4 +85,24 @@
 		border-radius: 1rem;
 		margin-right: 0.2rem;
 	}
+}
+
+.question-item-tag-container {
+	display: none;
+	position: absolute;
+
+	list-style: none;
+	height: 3rem;
+	width: 5rem;
+	margin: 0;
+	padding: 0;
+
+	background: white;
+    box-shadow: 0 0 5px grey;
+    top: -50%;
+    text-align: center;
+    color: orange;
+
+	overflow-x: hidden;
+	overflow-y: auto;
 }
