@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styles from './style.module.scss'
+import notify from '/components/notification'
 
 import { loginApi, registerApi, getCodeApi } from '/middleware/request'
 import axios from '/middleware/axios'
@@ -27,14 +28,14 @@ function GrantPage() {
 		if(account !== '' && loginPassword !== '') {
 			loginApi({account, password: loginPassword}, (res) => {
 				if(res.data.statu) {
-					alert('登录成功')
+					notify({ title: '登录成功', type: 'success' })
 					router.push({ pathname: '/' })
 				} else {
-					alert('登录失败')
+					notify({ title: '登录失败', type: 'error' })
 				}
-			}, (err) => { alert('登录失败')})
+			}, (err) => { notify({ title: '登录失败', type: 'error' }) })
 		} else {
-			alert('帐号或密码不可为空！')
+			notify({ title: '帐号或密码不可为空！', type: 'warning' })
 		}
 	}
 
@@ -63,17 +64,17 @@ function GrantPage() {
 	const getValidateCode = () => {
 		if(remainingTime == 0) {
 			if(email.indexOf('@') === -1) { 
-				alert('邮箱格式错误')
+				notify({ title: '邮箱格式错误！', type: 'error' })
 				return ;
 			 }
 			getCodeApi({email: email}, (res) => {
-				alert('验证码已发送')
+				notify({ title: '验证码已发送', type: 'success' })
 				setRemainingTime(60)
 				timer = setInterval(() => {
 					setRemainingTime(remainingTime => remainingTime -1)
 				}, 1000)
 				setTimer(timer)
-			}, (err) => {alert('获取验证码失败')})
+			}, (err) => {notify({ title: '获取验证码失败，请稍后重试', type: 'error' })})
 		}
 	}
 
@@ -86,21 +87,21 @@ function GrantPage() {
 
 	//定义注册事件
 	const register = () => {
-		if(email.indexOf('@') === -1) { alert('邮箱格式错误') }
-		else if(registerPassword === '' || confirmPassword === '') { alert('密码获取确认密码不可为空') }
-		else if(registerPassword !== confirmPassword) { alert('两次密码不一致') }
-		else if(validateCode === '') { alert('验证码不可为空') }
+		if(email.indexOf('@') === -1) { notify({ title: '邮箱格式错误！', type: 'error' }) }
+		else if(registerPassword === '' || confirmPassword === '') { notify({ title: '密码不可为空', type: 'error' }) }
+		else if(registerPassword !== confirmPassword) { notify({ title: '两次密码不一致', type: 'error' }) }
+		else if(validateCode === '') {notify({ title: '验证码不可为空', type: 'error' })}
 		else {
 			registerApi({email, password: registerPassword, validCode: validateCode}, (res) => {
 				if(res.data.statu) {
-					alert('注册成功')
+					notify({ title: '注册成功', type: 'success' })
 					setAccount(email)
 					setLoginPassword(registerPassword)
 					setCurrentMode('login')
 				} else {
-					alert('注册失败')
+					notify({ title: '注册失败', type: 'error' })
 				}
-			}, (err) => { alert('网络错误') })
+			}, (err) => { notify({ title: '网络错误', type: 'error' }) })
 		} 
 	}
 

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { getCommentApi, publishCommentApi, authApi } from '/middleware/request'
 import styles from './style.module.scss'
+import notify from '/components/notification'
 
 
 function CommentAreaComponent(props) {
@@ -60,7 +61,10 @@ function CommentAreaComponent(props) {
 					if (result) router.push({ pathname: '/grant' })
 					else setIsWriting(false)
 				}
-			}, (err) => { alert('网络错误'); setIsWriting(false); })
+			}, (err) => {
+				notify({ title: '网络错误', type: 'error' })
+				setIsWriting(false)
+			})
 		}
 	})
 
@@ -90,11 +94,14 @@ function CommentAreaComponent(props) {
 			publishCommentApi({ content: commentContent, replyTarget: replyTarget.slice(1) }, (res) => {
 				//请求成功
 				if (res.data.statu) {
-					alert('评论成功')
+					notify({ title: '评论成功', type: 'success' })
 				}
-				else { alert(res.data.reason) }
+				else { notify({ title: res.data.reason, type: 'error' }) }
 				setIsWriting(false)
-			}, (err) => { alert('网络错误'); setIsWriting(false); })
+			}, (err) => {
+				notify({ title: '网络错误', type: 'error' })
+				setIsWriting(false)
+			})
 		}
 	}
 

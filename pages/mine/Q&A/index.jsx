@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import DropDownContainer from '/components/dropDownContainer'
 import styles from './style.module.scss'
+import notify from '/components/notification'
 
 import { userQuestionApi, userSolutionApi } from '/middleware/request'
 
@@ -17,16 +18,16 @@ function MineQandAPage() {
 			if(res.data) {
 				setSolutionList([...res.data.solutionList])
 			} else {
-				alert('网络错误，请刷新页面')
+				notify({title: '网络错误，请刷新页面', type: 'error'})
 			}
 		}, (err) => {console.log(err)})
 		userQuestionApi((res) => {
 			if(res.data) {
 				setQuestionList([...res.data.questionList])
 			} else {
-				alert('网络错误，请刷新页面')
+				notify({title: '网络错误，请刷新页面', type: 'error'})
 			}
-		}, (err) => {alert('网络错误，请刷新页面')})		
+		}, (err) => {notify({title: '网络错误，请刷新页面', type: 'error'})})		
 	}, [])
 
 	return (

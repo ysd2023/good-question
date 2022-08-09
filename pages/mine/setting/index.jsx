@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useState, useRef, useEffect } from 'react'
 import styles from './style.module.scss'
+import notify from '/components/notification'
 
 import { updateUserApi, updatePasswordApi, quitApi } from '/middleware/request'
 import axios from '/middleware/axios'
@@ -35,7 +36,7 @@ function MineSettingPage(props) {
 		if(result) {
 			updateUserApi({avatar: imageRef.current.files[0], nickName: null}, (res) => {
 				if(res.data.statu) setImageUrl(window.URL.createObjectURL(imageRef.current.files[0]))
-				else { alert(res.data.reason) }
+				else { notify({title: res.data.reason, type: 'error'}) }
 			})
 		}
 	}
@@ -49,7 +50,7 @@ function MineSettingPage(props) {
 					if(res.data.statu) setCurrentNickName(nickName)
 					else { 
 						setNickName(currentNickName)
-						alert(res.data.reason) 
+						notify({title: res.data.reason, type: 'error'}) 
 					}
 				})
 			} else {
@@ -72,17 +73,17 @@ function MineSettingPage(props) {
 
 	//定义修改密码事件
 	const updatePassword = () => {
-		if(newPassword !== secondPassword) { alert('两次密码不一致') }
-		else if (newPassword === '') { alert('新密码不可为空') }
-		else if (oldPassword === '') { alert('旧密码不可为空') }
+		if(newPassword !== secondPassword) { notify({title: '两次密码不一致', type: 'warning'}) }
+		else if (newPassword === '') {notify({title: '新密码不可为空', type: 'warning'})}
+		else if (oldPassword === '') { notify({title: '旧密码不可为空', type: 'warning'}) }
 		else {
 			setPasswordVisibility(true)
 			updatePasswordApi({oldPassword, newPassword}, (res) => {
-				if(res.data.statu) alert('修改密码成功')
-				else alert('修改密码失败')
+				if(res.data.statu) notify({title: '修改密码成功', type: 'success'})
+				else notify({title: '修改密码失败', type: 'error'})
 				setPasswordVisibility(false)
 			}, (err) => {
-				alert('网络错误')
+				notify({title: '网络错误', type: 'error'})
 			})
 		}
 	}
@@ -91,12 +92,12 @@ function MineSettingPage(props) {
 	const quit = () => {
 		quitApi((res) => {
 			if(res.data.statu) {
-				alert('退出登录成功')
+				notify({title: '退出登录成功', type: 'success'})
 				router.push({pathname: '/grant'})
 			} else {
-				alert('退出登录失败')
+				notify({title: '退出登录失败', type: ''})
 			}
-		}, (err) => { alert('网络错误') })
+		}, (err) => { notify({title: '网络错误', type: 'error'}) })
 	}
 
 	return (

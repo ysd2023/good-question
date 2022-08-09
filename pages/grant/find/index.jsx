@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styles from './style.module.scss'
+import notify from '/components/notification'
 
 import { getCodeApi, resetApi } from '/middleware/request'
 
@@ -32,17 +33,17 @@ function FindPage() {
 	const getValidateCode = () => {
 		if(remainingTime == 0) {
 			if(email.indexOf('@') === -1) { 
-				alert('邮箱格式错误')
+				notify({ title: '邮箱格式错误！', type: 'error' })
 				return ;
 			 }
 			getCodeApi({email: email}, (res) => {
-				alert('验证码已发送')
+				notify({ title: '验证码已发送', type: 'success' })
 				setRemainingTime(60)
 				timer = setInterval(() => {
 					setRemainingTime(remainingTime => remainingTime -1)
 				}, 1000)
 				setTimer(timer)
-			}, (err) => {alert('获取验证码失败')})
+			}, (err) => {notify({ title: '获取验证码失败，请稍后重试', type: 'error' })})
 		}
 	}
 
@@ -55,19 +56,19 @@ function FindPage() {
 
 	//定义注册事件
 	const find = () => {
-		if(email.indexOf('@') === -1) { alert('邮箱格式错误') }
-		else if(password === '' || confirmPassword === '') { alert('密码获取确认密码不可为空') }
-		else if(password !== confirmPassword) { alert('两次密码不一致') }
-		else if(validateCode === '') { alert('验证码不可为空') }
+		if(email.indexOf('@') === -1) { notify({ title: '邮箱格式错误！', type: 'error' }) }
+		else if(password === '' || confirmPassword === '') { notify({ title: '密码不可为空', type: 'error' }) }
+		else if(password !== confirmPassword) { notify({ title: '两次密码不一致', type: 'error' }) }
+		else if(validateCode === '') { notify({ title: '验证码不可为空', type: 'error' }) }
 		else {
 			resetApi({account: email, newPassword: password, validateCode}, (res) => {
 				//若重置密码成功
 				if(res.data.statu) {
-					alert('设置新密码成功')
+					notify({ title: '设置新密码成功', type: 'success' })
 					router.push({pathname: '/grant'}) 
 				}
-				else { alert(res.data.reason) }
-			}, (err) => { alert('网络错误') })
+				else { notify({ title: res.data.reason, type: 'error' }) }
+			}, (err) => { notify({ title: '网络错误', type: 'error' }) })
 		} 
 	}
 

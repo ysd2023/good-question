@@ -6,6 +6,7 @@ import { getSolutionApi, indicateAttitudeApi } from '/middleware/request'
 import styles from './style.module.scss'
 import CommentArea from '/components/commentArea'
 import axios from '/middleware/axios'
+import notify from '/components/notification'
 
 function QuestionDetailPage(props) {
 	//解构 发布者、问题、解决方案
@@ -35,7 +36,7 @@ function QuestionDetailPage(props) {
 			//将当前解决方案更改为上一个
 			if(currentIndex === 0) {
 				//若当前为第一个解决方案，则决绝操作
-				alert('当前为第一个方案')
+				notify({title: '当前为第一个方案', type: 'warning'})
 			} else {
 				//更改索引
 				setCurrentIndex(currentIndex - 1)
@@ -47,7 +48,7 @@ function QuestionDetailPage(props) {
 				getSolutionApi({question_id: props.question_id}, ({data}) => {
 					if(data.solutionList.length === 0) {
 						//返回列表为空，显示已加载完成
-						alert('已加载所有方案')
+						notify({title: '已加载所有方案'})
 					} else {
 						//将新的方案列表，添加到后面
 						setSolutionList(solutionList.concat(data.solutionList))
@@ -98,9 +99,9 @@ function QuestionDetailPage(props) {
 			if(res.data.statu) {
 				setFavor(favor => favor + 1)
 			} else {
-				alert('网络错误')
+				notify({title: res.data.reason, type: 'error'})
 			}
-		}, (err) => { alert('网络错误') })
+		}, (err) => { notify({title: '网络错误', type: 'error'}) })
 	}
 
 	//定义反对事件
@@ -110,9 +111,9 @@ function QuestionDetailPage(props) {
 			if(res.data.statu) {
 				setOpposition(opposition => opposition + 1)
 			} else {
-				alert('网络错误')
+				notify({title: res.data.reason, type: 'error'})
 			}
-		}, (err) => { alert('网络错误') })
+		}, (err) => { notify({title: '网络错误', type: 'error'}) })
 	}
 
 	//监听当前解决方案的变化，更新评论数量，态度数量的展示
