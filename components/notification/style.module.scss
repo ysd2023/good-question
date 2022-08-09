@@ -1,0 +1,35 @@
+.notification-container {
+	position: fixed;
+	top: 0%;
+	z-index: 999;
+	background-color: white;
+	box-shadow: 0 0 10px rgb(115, 115, 115);
+	width: 100%;
+	max-width: 500px;
+	text-align: center;
+	transform: translateY(-100%);
+	animation: notification-in 0.5s forwards cubic-bezier(.08,.21,.08,.94);
+}
+
+@keyframes notification-in {
+	100% {
+		transform: translateY(0);
+	}
+}
+
+.notification-title-default {
+	color: rgb(0, 123, 255);
+}
+
+.notification-title-success {
+	color: rgb(61, 195, 117);
+}
+
+.notification-title-error {
+	color: rgb(251, 101, 101);
+}
+
+.notification-title-warning {
+	color: rgb(255, 182, 56);
+}
+
