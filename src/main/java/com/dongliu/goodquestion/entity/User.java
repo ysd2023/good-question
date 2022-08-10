@@ -1,6 +1,11 @@
-package main.java.com.dongliu.goodquestion.entity;
+package com.dongliu.goodquestion.entity;
 
-public class User {
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public class User implements Serializable {
     String account; //用户账号
     String password; //用户密码
     String nickName;    //昵称

@@ -15,10 +15,8 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.data.repository.NoRepositoryBean;
 
 import java.time.Duration;
-import java.time.temporal.Temporal;
 
 public class RedisConfig extends CachingConfigurerSupport {
     @Bean

@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class UploagFileUtil {
+public class UploagFileUtil implements UploagFile{
 
     @Autowired
     private String fileSavePath;

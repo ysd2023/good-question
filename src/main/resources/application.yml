@@ -1,0 +1,67 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8888
+#  servlet:
+#    context-path: /api
+# 应用名称
+spring:
+  application:
+    name: good-question
+  #文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+  # 数据库驱动：
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据源名称
+    name: defaultDataSource
+    # 数据库连接地址
+    url: jdbc:mysql://localhost:3306/goodquestion?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: root
+    #邮件配置
+  mail:
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    port: 587
+    username: shun2023@qq.com
+    password: tgtvoiyoyptkecfh
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    connect-timeout: 1800000
+    lettuce:
+      pool:
+        max-wait: -1
+        max-active: 20
+        max-idle: 5
+        min-idle: 0
+#下面这些内容是为了让MyBatis映射
+mybatis:
+  #指定Mybatis的Mapper文件
+  mapper-locations: classpath:mapper/*xml
+  #指定Mybatis的实体目录
+  type-aliases-package: com.dongliu.goodquestion.entity
+  #开启驼峰命名自动配置
+  configuration:
+    map-underscore-to-camel-case: true
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params:
+    count: count=countSql
+
+
+
+
+#系统配置
+pathProperties: /api
+page:
+  size: 10
+  navigatePages: 5
+vaildCodeNum: 4
+suggestNum: 5

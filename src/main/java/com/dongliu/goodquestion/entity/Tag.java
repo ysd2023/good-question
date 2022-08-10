@@ -1,6 +1,11 @@
-package main.java.com.dongliu.goodquestion.entity;
+package com.dongliu.goodquestion.entity;
 
-public class Tag {
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public class Tag implements Serializable {
     Integer id; //标签索引
     String context; //标签内容
 }

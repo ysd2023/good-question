@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockCookie;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -68,7 +69,7 @@ class LoginControllerTest {
 
     @Test
     void getCode() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/getCode?email=shun2019@qq.com")
+        mvc.perform(MockMvcRequestBuilders.get("/api/getCode?email=shun2019@qq.com")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(""))
@@ -78,7 +79,7 @@ class LoginControllerTest {
 
     @Test
     void quit() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/quit")
+        mvc.perform(MockMvcRequestBuilders.get("/api/quit")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(""))
