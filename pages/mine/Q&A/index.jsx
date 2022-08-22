@@ -44,7 +44,7 @@ function MineQandAPage() {
 		    			questionList.map(question => (
 		    				<div key={question.questionID} className={styles['list-item-container']}>
 		    					<h2>{question.title}</h2>
-		    					<p>{question.summary}</p>
+		    					<section dangerouslySetInnerHTML={{__html: question.summary}}></section>
 		    					<div>{question.date}</div>
 		    				</div>
 	    				))
@@ -54,10 +54,8 @@ function MineQandAPage() {
 		    		{
 		    			solutionList.map(solution => (
 		    				<div key={solution.questionID} className={styles['list-item-container']}>
-		    					<h2>{solution.title}</h2>
-		    					<p>{solution.summary}</p>
 		    					<h3>你的方案:</h3>
-		    					<section dangerouslySetInnerHTML={{__html: solution.solution}}></section>
+		    					<section dangerouslySetInnerHTML={{__html: JSON.parse(solution.content).plainText}}></section>
 		    					<div>{solution.date}</div>
 		    				</div>
 	    				))

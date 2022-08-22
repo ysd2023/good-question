@@ -428,4 +428,41 @@
   })
   ```
 
+
+
+
+---
+
+
+
+### 十三、ImageLoad
+
+#### 1.组件功能
+
+该组件提供图片模糊加载，用户可以提供压缩图片的链接和原图片的链接，组件在加载完后加载原图。
+
+#### 2. 依赖关系
+
+无。
+
+#### 3.提供的属性或接口
+
+- normalUrl`<String>`
+
+  该参数接收原图片的链接。
+
+- compressedUrl`<String>`
+
+  该参数接收压缩图片的链接。
+
+  
+
+  示例：
+
+  ```jsx
+   import ImageLoad from '/components/imageLoad'
+  
+  <ImageLoad normalUrl={"http://..."} compressedUrl={"http://..."} />
+  ```
+
   
