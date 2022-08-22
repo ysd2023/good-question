@@ -51,7 +51,7 @@ publisher {
 {
     summary: String //对请求问题的简单描述，可选
     pageNum: Number //请求所需页面数据的页码，可选，默认为0
-    tagID: Number //请求问题包含的标签，可选
+    type: String //请求问题包含的标签，可选
 }
 ```
 
@@ -285,7 +285,7 @@ commentor {
 
 ```
 {
-    upload-image: File
+    uploadImage: File
 }
 ```
 
@@ -419,13 +419,13 @@ commentor {
 
 ##### 11.2 接口地址（get）
 
-- `url: '/api/getTab'`
+- `url: '/api/getType'`
 
 ##### 11.3 响应数据(`json`)
 
 ```
 {
-    tabs: Array<String> //分类标签的数组
+    types: Array<String> //分类标签的数组
 }
 ```
 
