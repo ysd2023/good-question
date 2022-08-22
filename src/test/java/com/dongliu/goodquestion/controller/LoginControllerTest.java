@@ -39,7 +39,7 @@ class LoginControllerTest {
 
     @Test
     void login() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/login")
+        mvc.perform(MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"account\":\"shun2019@qq.com\",\"password\":\"123456\"}"))
@@ -49,7 +49,7 @@ class LoginControllerTest {
 
     @Test
     void auth() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/auth")
+        mvc.perform(MockMvcRequestBuilders.get("/api/auth")
                 .session(session)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .content(""))
@@ -59,7 +59,7 @@ class LoginControllerTest {
 
     @Test
     void register() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/register")
+        mvc.perform(MockMvcRequestBuilders.post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"email\":\"shun2019@qq.com\",\"password\":\"123456\",\"vaildCode\":\"EyVv\"}"))
@@ -89,7 +89,7 @@ class LoginControllerTest {
 
     @Test
     void reset() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/reset")
+        mvc.perform(MockMvcRequestBuilders.get("/api/reset")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(""))

@@ -1,7 +1,6 @@
-package com.dongliu.goodquestion.mapper;
+package com.dongliu.goodquestion.dao.mapper;
 
 import com.dongliu.goodquestion.entity.Tag;
-import com.dongliu.goodquestion.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

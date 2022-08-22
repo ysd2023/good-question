@@ -1,4 +1,4 @@
-package com.dongliu.goodquestion.mapper;
+package com.dongliu.goodquestion.dao.mapper;
 
 import com.dongliu.goodquestion.entity.Question;
 import org.apache.ibatis.annotations.Mapper;

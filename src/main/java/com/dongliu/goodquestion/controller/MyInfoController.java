@@ -1,20 +1,26 @@
 package com.dongliu.goodquestion.controller;
 
+import com.dongliu.goodquestion.Util.ResultUtil;
+import com.dongliu.goodquestion.dao.ealsticsearch.QuestionDao;
+import com.dongliu.goodquestion.dao.ealsticsearch.SolutionDao;
 import com.dongliu.goodquestion.entity.Question;
 import com.dongliu.goodquestion.entity.Solution;
 import com.dongliu.goodquestion.entity.User;
 import com.dongliu.goodquestion.service.MyInfoService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @CrossOrigin
 @RestController
 public class MyInfoController {
@@ -27,6 +33,11 @@ public class MyInfoController {
     @Autowired
     MyInfoService myInfoService;
 
+    @Autowired
+    QuestionDao questionDao;
+    @Autowired
+    SolutionDao solutionDao;
+
 
     /**
      * 获取个人信息
@@ -37,6 +48,7 @@ public class MyInfoController {
      */
     @GetMapping("/userInfo")
     public User userInfo(@SessionAttribute("persionalInfo") User user){
+        log.info("userInfo:"+user.toString());
         if(user.getNickName()==null||user.getAvatar()==null){
             user = myInfoService.getUserInfo(user.getAccount());
         }
@@ -52,9 +64,13 @@ public class MyInfoController {
      */
     @GetMapping("/activityInfo")
     public User activityInfo(@SessionAttribute("persionalInfo") User user){
-        if(user.getLikes()==null||user.getQuestions()==null||user.getSolutions()==null){
-            user = myInfoService.getUserInfo(user.getAccount());
-        }
+        log.info("activityInfo:"+user.toString());
+        Integer questions = questionDao.countByPublisher_Account(user.getAccount());
+        Integer solutions = solutionDao.countByResolver_Account(user.getAccount());
+        user.setLikes(0);
+        user.setQuestions(questions);
+        user.setSolutions(solutions);
+        myInfoService.setUsetInfo(user);
         return user;
     }
 
@@ -67,11 +83,16 @@ public class MyInfoController {
      * @return
      */
     @PostMapping("/updateUser")
-    public Map<String,Object> updateUser(@SessionAttribute("persionalInfo") User user,@RequestBody MultipartFile avatar, @RequestBody String nickName){
+    public Map<String,Object> updateUser(HttpSession session, @RequestBody MultipartFile avatar, String nickName){
+        User user = (User)session.getAttribute("persionalInfo");
+        log.info("updateUser:"+user.toString()+"，nickName:"+nickName);
         boolean statu = myInfoService.setUsetInfo(user.getAccount(),avatar,nickName);
+        log.info("u:"+statu);
         Map<String,Object> result = new HashMap<>();
         if(statu) {
-            result.put("reason", "修改成功");
+            result.put("reason", "修改成功");;
+            session.setAttribute("persionalInfo",user);
+            session.setMaxInactiveInterval(600);
         } else {
             result.put("reason", "修改失败");
         }
@@ -87,11 +108,9 @@ public class MyInfoController {
      * @return
      */
     @GetMapping("/myQuestion")
-    public List<Question> myQuestion(@SessionAttribute("persionalInfo") User user,@RequestParam(defaultValue = "1") Integer pageNum){
-        PageHelper.startPage(pageNum, pageSize);
-        List<Question> questionList = myInfoService.getQuestions(user);
-        PageInfo page = new PageInfo<>(questionList,navigatePages);
-        return questionList;
+    public Map<String,Object> myQuestion(@SessionAttribute("persionalInfo") User user,@RequestParam(defaultValue = "0") Integer pageNum){
+        List<Question> questionList = myInfoService.getQuestions(user.getAccount(),pageNum);
+        return ResultUtil.result("questionList",questionList);
     }
 
     /**
@@ -102,23 +121,23 @@ public class MyInfoController {
      * @return
      */
     @GetMapping("/mySolution")
-    public List<Solution> mySolution(@SessionAttribute("persionalInfo") User user, @RequestParam(defaultValue = "1") Integer pageNum){
-        PageHelper.startPage(pageNum, pageSize);
-        List<Solution> solutionList = myInfoService.getSolutions(user);
-        PageInfo page = new PageInfo<>(solutionList,navigatePages);
-        return solutionList;
+    public Map<String,Object> mySolution(@SessionAttribute("persionalInfo") User user, @RequestParam(defaultValue = "0") Integer pageNum){
+        List<Solution> solutionList = myInfoService.getSolutions(user.getAccount(),pageNum);
+        return ResultUtil.result("solutionList",solutionList);
     }
 
     /**
      * 修改密码
      * 用户修改密码
      * url: '/api/updatePassword'
-     * @param oldPassword
-     * @param newPassword
+     * @param map oldPassword-旧密码，newPassword-新密码
      * @return
      */
     @PostMapping("/updatePassword")
-    public Map<String,Object> updatePassword(@SessionAttribute("persionalInfo") User user, @RequestBody String oldPassword, @RequestBody String newPassword){
+    public Map<String,Object> updatePassword(@SessionAttribute("persionalInfo") User user, @RequestBody Map<String, String> map){
+        log.info("updatePassword:"+user.getAccount());
+        String oldPassword = map.get("oldPassword");
+        String newPassword = map.get("newPassword");
         Map<String,Object> result = new HashMap<>();
         boolean statu = myInfoService.isLogin(user.getAccount(),oldPassword);
         if(statu){

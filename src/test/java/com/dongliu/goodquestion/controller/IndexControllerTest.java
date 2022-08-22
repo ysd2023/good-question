@@ -1,9 +1,13 @@
 package com.dongliu.goodquestion.controller;
 
+import com.dongliu.goodquestion.entity.Question;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -14,8 +18,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest
 class IndexControllerTest {
+    @Autowired
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @Autowired
     private WebApplicationContext wac;
@@ -61,7 +68,7 @@ class IndexControllerTest {
 
     @Test
     void suggest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/getTab")
+        mvc.perform(MockMvcRequestBuilders.get("/api/suggest")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(""))
@@ -71,11 +78,20 @@ class IndexControllerTest {
 
     @Test
     void getTab() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/getTab")
+        mvc.perform(MockMvcRequestBuilders.get("/api/getTab")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(""))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void createIndex(){
+        log.info("创建索引");
+    }
+
+    @Test
+    void deleteIndex(){
     }
 }

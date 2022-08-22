@@ -1,23 +1,31 @@
 package com.dongliu.goodquestion.service;
 
 import com.dongliu.goodquestion.Util.UploagFile;
+import com.dongliu.goodquestion.dao.ealsticsearch.QuestionDao;
+import com.dongliu.goodquestion.dao.ealsticsearch.SolutionDao;
 import com.dongliu.goodquestion.entity.*;
-import com.dongliu.goodquestion.mapper.*;
+import com.dongliu.goodquestion.dao.mapper.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.*;
 
+@Slf4j
 @Service
 public class IndexServiceImpl implements IndexService{
 
     @Value("${suggestNum}")
-    private int suggestNum;
+    private int SUGGESTNUM;
+    @Value("${page.size}")
+    private int PAGESIZE;
+    @Value("${image.suffix")
+    private String SUFFIX;
 
     @Autowired
     UploagFile uploagFile;
@@ -33,65 +41,75 @@ public class IndexServiceImpl implements IndexService{
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    private QuestionDao questionDao;
+    @Autowired
+    private SolutionDao solutionDao;
+
 
     @Override
-    public List<Question> getQuestions(String summary, Tag tag) {
-        Question question = new Question();
-        question.setSummary(summary);
-        question.setTag(tag);
-//        return questionMapper.selectQuestion(question);
-        List<Question> questionList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Question question1 = new Question();
-            Random random = new Random();
-            question1.setQuestionID(random.nextInt(1000000000));
-            User user = new User();
-            user.setAccount("shun2019@qq.com");
-            question1.setPublisher(userMapper.selectUser(user).get(0));
-            question1.setTag(tag);
-            question1.setSummary(summary+"概要:"+i);
-            question1.setDate(new Date());
-            question1.setTitle("标题"+i);
-            questionList.add(question1);
+    public List<Question> getQuestions(String summary, String type, Integer pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, PAGESIZE);
+        List<Question> questionList = null;
+        if(type!=null) {
+            if (summary != null) {
+                questionList = questionDao.queryBySummaryAndType(summary, type, pageRequest).getContent();
+            } else {
+                questionList = questionDao.queryByType(type, pageRequest).getContent();
+            }
+        }else {
+            questionList =  questionDao.queryByTitleOrSummary(summary,summary,pageRequest).getContent();
         }
         return questionList;
     }
 
     @Override
-    public Question detail(Integer questionID) {
-        Question question = new Question();
-        question.setQuestionID(questionID);
-        List<Question> questionList = questionMapper.selectQuestion(question);
-        if(questionList.size()>0){
-            return questionList.get(0);
-        }
-        return null;
+    public Question detail(String questionID) {
+        return questionDao.findById(questionID).get();
     }
 
     @Override
-    public List<Solution> getSolution(Integer questionID) {
-        Solution solution = new Solution();
-        solution.setQuestionID(questionID);
-        return solutionMapper.selectSolution(solution);
+    public List<Solution> getSolutions(String questionID, Integer pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, PAGESIZE);
+        return solutionDao.findByQuestionID(questionID, pageRequest).getContent();
+    }
+    @Override
+    public Solution getSolution(String solutionID){
+        return solutionDao.findById(solutionID).get();
     }
 
+
     @Override
-    public List<Comment> getComment(Integer solutionID) {
+    public List<Comment> getComment(String solutionID) {
         Comment comment = new Comment();
         comment.setSolutionID(solutionID);
+        log.info(comment.toString());
         return commentMapper.selectComment(comment);
     }
 
     @Override
-    public boolean publishSolution(String account, Integer citeSolutionID, String content) {
+    public boolean publishSolution(String account, String questionID, String citeSolutionID, String content) {
         Solution solution = new Solution();
-        User resolver = new User();
-        resolver.setAccount(account);
-        solution.setResolver(resolver);
-        solution.setCiteSolution(citeSolutionID);
+        User user = new User(account);
+        List<User> l = userMapper.selectUser(user);
+        if(l!=null&&l.get(0)!=null)
+            user = l.get(0);
+        solution.setResolver(user);
+        solution.setDate(new Date());
+        solution.setQuestionID(questionID);
         solution.setContent(content);
-        solution.setResolver(resolver);
-        return solutionMapper.insertSolution(solution);
+        solution.setCiteSolution(citeSolutionID);
+        solution.setComment(0);
+        solution.setFavor(0);
+        solution.setOpposition(0);
+        solution.setStatu(true);
+        solution.setReason("默认发布成功");
+        solution =solutionDao.save(solution);
+        Question question = questionDao.findById(questionID).get();
+        question.setSolutionNum(question.getSolutionNum() + 1);
+        question = questionDao.save(question);
+        log.info("after:"+solution.toString());
+        return solution != null && solution.getSolutionID() != null && question != null;
     }
 
     @Override
@@ -99,7 +117,10 @@ public class IndexServiceImpl implements IndexService{
         if(!file.isEmpty()){
             String filePath = null;
             try {
-                filePath = uploagFile.uploadFile(file,account + File.separator + UUID.randomUUID().toString().replace("-",""));
+                String fileName = file.getOriginalFilename();
+                String path = account;
+                filePath = uploagFile.uploadFile(file, path + File.separator + UUID.randomUUID().toString().replace("-","")+ fileName.substring(fileName.lastIndexOf(".")));
+                uploagFile.createThumbnailator(filePath);
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -114,30 +135,34 @@ public class IndexServiceImpl implements IndexService{
     }
 
     @Override
-    public boolean indicateAttitude(String account, Integer solutionID, boolean attitude) {
-        Solution solution = new Solution();
-        solution.setSolutionID(solutionID);
-        List<Solution> solutionList = solutionMapper.selectSolution(solution);
-        if(solutionList.size()>0){
-            solution = solutionList.get(0);
-            if(attitude){
-                solution.setFavor(solution.getFavor()+1);
-            } else {
-                solution.setOpposition(solution.getOpposition()+1);
-            }
-            return solutionMapper.updateSolution(solution);
+    public boolean indicateAttitude(String account, String solutionID, boolean attitude) {
+        Solution solution = solutionDao.findById(solutionID).get();
+        if(attitude){
+            solution.setFavor(solution.getFavor()+1);
         } else {
-            return false;
+            solution.setOpposition(solution.getOpposition()+1);
         }
+        solution = solutionDao.save(solution);
+        return solution != null && solution.getSolutionID() != null;
     }
 
     @Override
     public List<String> suggest(String keyword) {
-        return questionMapper.selectQuestionByKeyWork(keyword,suggestNum);
+        List<String> suggests = new ArrayList<>();
+        PageRequest pageRequest = PageRequest.of(0,SUGGESTNUM);
+        Iterable<Question> questions = questionDao.queryByTitleOrSummary(keyword,keyword,pageRequest).getContent();
+        for (Question question :
+                questions) {
+            if(question.getTitle().contains(keyword))
+                suggests.add(question.getTitle());
+            if(question.getSummary().contains(keyword))
+                suggests.add(question.getSummary());
+        }
+        return suggests;
     }
 
     @Override
-    public List<String> getTab() {
+    public List<String> getType() {
         return tagMapper.selectTagToString();
     }
 }

@@ -13,17 +13,18 @@ public interface IndexService {
      * 根据搜索关键字，分页获取问题
      * url： /api/getQuestions
      * @param summary 对问题的简单描述
-     * @param tag 问题所属标签
+     * @param type 问题所属标签索引
+     * @param pageNum 分页页码
      * @return
      */
-    List<Question> getQuestions(String summary, Tag tag);
+    List<Question> getQuestions(String summary, String type,Integer pageNum);
 
     /**
      * 获取问题的相关信息
      * @param questionID 问题索引
      * @return
      */
-    Question detail(Integer questionID);
+    Question detail(String questionID);
 
 
     /**
@@ -33,7 +34,16 @@ public interface IndexService {
      * @param questionID //问题索引
      * @return
      */
-    List<Solution> getSolution(Integer questionID);
+    List<Solution> getSolutions(String questionID, Integer pageNum);
+
+    /**
+     * 获取解决方案
+     * 获取对应解决方案引用的方案
+     * 获取单个解决方案，根据唯一标识
+     * @param solutionID
+     * @return
+     */
+    Solution getSolution(String solutionID);
 
     /**
      * 获取评论
@@ -41,17 +51,18 @@ public interface IndexService {
      * @param solutionID //解决方案索引
      * @return
      */
-    List<Comment> getComment(Integer solutionID);
+    List<Comment> getComment(String solutionID);
 
     /**
      * 发布解决方案
      * 对问题提出解决方案
      * @param account 账号
+     * @param questionID
      * @param citeSolutionID
      * @param content
      * @return
      */
-    boolean publishSolution(String account, Integer citeSolutionID, String content);
+    boolean publishSolution(String account, String questionID, String citeSolutionID, String content);
 
     /**
      * 上传图片
@@ -82,7 +93,7 @@ public interface IndexService {
      * @param attitude //态度。true: 赞成; false: 反对
      * @return
      */
-    boolean indicateAttitude(String account, Integer solutionID, boolean attitude);
+    boolean indicateAttitude(String account, String solutionID, boolean attitude);
 
     /**
      * 搜索词联想
@@ -97,5 +108,5 @@ public interface IndexService {
      * 获取首页的分类标签
      * @return
      */
-    List<String> getTab();
+    List<String> getType();
 }

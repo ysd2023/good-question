@@ -2,7 +2,7 @@ package com.dongliu.goodquestion.service;
 
 import com.dongliu.goodquestion.Util.VaildCode;
 import com.dongliu.goodquestion.entity.User;
-import com.dongliu.goodquestion.mapper.UserMapper;
+import com.dongliu.goodquestion.dao.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,6 +42,7 @@ public class LoginServiceImpl implements LoginService {
         User user = new User();
         user.setAccount(email);
         user.setPassword(passwordEncoder.encode(password));
+        user.setAvatar("default/default.jpeg");
         user.setNickName(email);
         user.setEmail(email);
         user.setLikes(0);

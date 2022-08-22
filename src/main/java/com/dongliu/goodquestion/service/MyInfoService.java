@@ -27,13 +27,15 @@ public interface MyInfoService {
      */
     boolean setUsetInfo(String account, MultipartFile avatar, String nickName);
 
+    boolean setUsetInfo(User user);
+
     /**
      * 获取提出问题
      * 获取用户提出的问题
      * @param user 用户信息
      * @return
      */
-    List<Question> getQuestions(User user);
+    List<Question> getQuestions(String account,Integer pageNum);
 
     /**
      * 获取发布方案
@@ -41,7 +43,7 @@ public interface MyInfoService {
      * @param user 用户信息
      * @return
      */
-    List<Solution> getSolutions(User user);
+    List<Solution> getSolutions(String account, Integer pageNum);
 
     /**
      * 登陆

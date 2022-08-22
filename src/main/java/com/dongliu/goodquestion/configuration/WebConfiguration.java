@@ -36,7 +36,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/res/uploadFile/**")
+        registry.addResourceHandler("/api/uploadFile/**")
                 .addResourceLocations("file:"+FileSavePath());
     }
 
@@ -66,6 +66,5 @@ public class WebConfiguration implements WebMvcConfigurer {
     public VaildCode vaildCode(){
         return new VaildCodeUtil();
     }
-
 
 }

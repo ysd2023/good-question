@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dongliu.goodquestion.mapper.UserMapper">
+<mapper namespace="com.dongliu.goodquestion.dao.mapper.UserMapper">
 
     <select id="selectPasssword" resultType="string">
         SELECT password FROM `user` WHERE account=#{account}

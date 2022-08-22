@@ -2,25 +2,41 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dongliu.goodquestion.mapper.CommentMapper">
+<mapper namespace="com.dongliu.goodquestion.dao.mapper.CommentMapper">
 
-    <select id="selectComment" resultType="comment">
-        SELECT solution_i_d,comment_i_d,account,content,reply_target,`date`,statu,reason
-        FROM `comment`
-        WHERE 1=1
+    <resultMap id="commentAll" type="comment">
+        <id property="commentID" column="comment_i_d"></id>
+        <result property="solutionID" column="solution_i_d"></result>
+        <result property="content" column="content"></result>
+        <result property="replyTarget" column="reply_target"></result>
+        <result property="date" column="`date`"></result>
+        <result property="statu" column="statu"></result>
+        <result property="reason" column="reason"></result>
+        <association property="commentor" javaType="user">
+            <id property="account" column="account"></id>
+            <id property="nickName" column="nick_name"></id>
+            <id property="avatar" column="avatar"></id>
+        </association>
+    </resultMap>
+    <select id="selectComment" resultMap="commentAll">
+        SELECT solution_i_d,comment_i_d,`user`.account account,nick_name,avatar,content,reply_target,`date`,statu,reason
+        FROM `comment`,`user`
+        WHERE 1=1 AND `comment`.account = `user`.account
         <if test="solutionID != null">AND solution_i_d=#{solutionID}</if>
         <if test="commentID != null">AND comment_i_d=#{commentID}</if>
-        <if test="account != null">AND account=#{account}</if>
+        <if test="commentor != null">
+            <if test="commentor.account != null">AND b.account=#{commentor.account}</if>
+        </if>
         <if test="content != null">AND content=#{content}</if>
         <if test="replyTarget != null">AND reply_target=#{replyTarget}</if>
         <if test="date != null">AND `date`=#{date}</if>
-        <if test="statu != null">AND statu=#{statu}</if>
+        <if test="statu != false">AND statu=#{statu}</if>
         <if test="reason != null">AND reason=#{reason}</if>
     </select>
 
     <insert id="insertComment" >
         INSERT INTO `comment`(solution_i_d,comment_i_d,account,content,reply_target,`date`,statu,reason)
-        VALUES (#{solutionID},#{commentID},#{account},#{content},#{reply_target},#{date},#{statu},#{reason})
+        VALUES (#{solutionID},#{commentID},#{commentor.account},#{content},#{replyTarget},#{date},#{statu},#{reason})
     </insert>
 
     <delete id="deleteQComment">

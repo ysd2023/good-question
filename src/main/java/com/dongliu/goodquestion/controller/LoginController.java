@@ -38,7 +38,7 @@ public class LoginController{
             user.setAccount(account);
             session.setAttribute("persionalInfo",user);
             session.setMaxInactiveInterval(600);
-            result.put("reason","设置成功。");
+            result.put("reason","登陆成功。");
         } else {
             result.put("reason","账号密码错误，请重新输入。");
         }
@@ -56,10 +56,9 @@ public class LoginController{
     public Map<String,Object> auth(HttpSession session){
         User user = (User)session.getAttribute("persionalInfo");
         boolean statu = user != null && user.getAccount() != null;
-        log.info("auth:");
         Map<String,Object> result = new HashMap<>();
         if(statu){
-            log.info("statu:"+user.getAccount());
+            log.info("auth:"+user.toString());
             result.put("reason","已登陆。");
         } else {
             result.put("reason","账号未登陆或登陆已过期。");

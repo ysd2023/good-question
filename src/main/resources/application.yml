@@ -39,6 +39,9 @@ spring:
         max-active: 20
         max-idle: 5
         min-idle: 0
+  elasticsearch:
+    uris: http://localhost:9200
+
 #下面这些内容是为了让MyBatis映射
 mybatis:
   #指定Mybatis的Mapper文件
@@ -55,9 +58,6 @@ pagehelper:
   params:
     count: count=countSql
 
-
-
-
 #系统配置
 pathProperties: /api
 page:
@@ -65,3 +65,6 @@ page:
   navigatePages: 5
 vaildCodeNum: 4
 suggestNum: 5
+
+image:
+  suffix: -thumbnail

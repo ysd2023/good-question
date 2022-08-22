@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dongliu.goodquestion.mapper.QuestionMapper">
+<mapper namespace="com.dongliu.goodquestion.dao.mapper.QuestionMapper">
 
     <select id="selectQuestion" resultType="question">
         SELECT question_i_d,title,summary,cover,`type`,solution_num,image_description,`date`,statu,reason,account,tag
