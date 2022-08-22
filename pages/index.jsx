@@ -50,7 +50,7 @@ export async function getServerSideProps(context) {
 
     return {
         props: {
-            tabList: resTabs.data.tabs
+            tabList: resTabs.data.types
         }
     }
 }

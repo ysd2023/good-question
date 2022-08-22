@@ -101,7 +101,7 @@ function EditorSolutionCitePage(props) {
 		//先上传图片，将图片转换成url
 		imageList.map(image => {
 			let formData = new FormData()
-			formData.append('upload-image', image.file)
+			formData.append('uploadImage', image.file)
 			imagePromise.push(new Promise((resolve) => {
 				uploadImageApi(formData, (res) => {
 					resolve(res.data)
@@ -119,31 +119,32 @@ function EditorSolutionCitePage(props) {
 					if (image.errno === 0) {
 						imageDescription.push(image.data.url)
 					} else {
-						imageDescription.push('#####')
+						imageDescription.push('####')
 					}
 				})
 				setImageDescription([...imageDescription])
 				setFinalContents(finalContent)
 				setProgress(9 + uploadSuccessImageNum * 9)
-				finalUpload()
+				finalUpload(finalContent, imageDescription)
 			}, 2000)
 		})
 	}
 
-	const finalUpload = () => {
-		//延迟上传
+	const finalUpload = (summary, imageDescription) => {
 		setTimeout(() => {
 			let coverImage = new FormData()
-			coverImage.append('upload-image', coverRef.current.files[0])
+			coverImage.append('uploadImage', coverRef.current.files[0])
 			uploadImageApi(coverImage, (res) => {
 				let coverImageUrl = '####'
 				if (res.data.errno === 0) {
 					//封面上传成功
 					coverImageUrl = res.data.data.url
+				} else if (res.data.errno === -1) {
+					coverImageUrl = null
 				}
 				publishQuestionApi({
 					title: questionTitle,
-					summary: finalContents,
+					summary,
 					cover: coverImageUrl,
 					imageDescription,
 					type: questionType,
@@ -171,7 +172,7 @@ function EditorSolutionCitePage(props) {
 	//定义重新上传事件
 	const rePublish = () => {
 		setPublishStatus('normal')
-		finalUpload()
+		finalUpload(finalContents, imageDescription)
 	}
 
 	//定义取消发布事件
@@ -330,8 +331,8 @@ export async function getServerSideProps(context) {
 	}
 
 	//获取问题分类
-	let resTabs = await axios.get('/api/getTab')
-	let tabs = resTabs.data.tabs
+	let resTabs = await axios.get('/api/getType')
+	let tabs = resTabs.data.types.slice(2)
 
 	return {
 		props: {

@@ -5,6 +5,7 @@ import styles from './style.module.scss'
 import notify from '/components/notification'
 
 import { userQuestionApi, userSolutionApi } from '/middleware/request'
+import axios from '/middleware/axios'
 
 function MineQandAPage() {
 	//定义问题列表

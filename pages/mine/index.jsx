@@ -25,7 +25,7 @@ function MinePage(props) {
 		    </div>
 		    <div className={styles['info-container']}>
 		    	<div className={styles['info-avatar']}>
-		    		<img alt="图片已损坏" src={userInfo.avatar}/>
+		    		<img alt="图片已损坏" src={'/api/uploadFile/' + userInfo.avatar}/>
 		    	</div>
 		    	<div className={styles['info-person']}>
 		    		<h3>{userInfo.nickName}</h3>
@@ -92,14 +92,22 @@ export async function getServerSideProps(context) {
 
 	//获取个人信息
 	let userInfo = null
-	const resUserInfo = await axios.get('/api/userInfo')
+	const resUserInfo = await axios({
+		method: 'get',
+		url: '/api/userInfo',
+		headers: { cookie: context.req.headers.cookie }
+	})
 	if(resUserInfo.data) {
 		userInfo = resUserInfo.data
 	}
 
 	//获取相关活跃信息
 	let activityInfo = null
-	const resActivityInfo = await axios.get('/api/activityInfo')
+	const resActivityInfo = await await axios({
+		method: 'get',
+		url: '/api/activityInfo',
+		headers: { cookie: context.req.headers.cookie }
+	})
 	if(resActivityInfo.data) {
 		activityInfo = resActivityInfo.data
 	}

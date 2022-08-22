@@ -16,9 +16,9 @@ function QuestionContainerComponent(props) {
 	//定义加载状态
 	const [isLoading, setIsLoading] = useState(true)
 	//定义标签和初始化状态
-	let { tab, tabIndex } = useSelector(state => state)
+	let { tab } = useSelector(state => state)
 	//定义当前页数
-	const [currentPage, setCurrentPage] = useState(0) 
+	const [currentPage, setCurrentPage] = useState(-2) 
 
 	useEffect(() => {
 		if(mode === 'search') {
@@ -29,10 +29,11 @@ function QuestionContainerComponent(props) {
 
 	useEffect(() => {
 		if(tab !== '') {
-			setCurrentPage(0)
+			setIsCompleted(false)
 			setQuestionList([])
+			setCurrentPage(-1)
 		}
-	}, [tab, tabIndex])
+	}, [tab])
 
 	//定义增加问题列表事件
 	const addQuestion = () => {
@@ -43,12 +44,12 @@ function QuestionContainerComponent(props) {
 
 		if(mode === 'tab') {
 			queryData = {
-				pageNum: currentPage,
-				tagID: tabIndex
+				pageNum: currentPage + 1,
+				type: tab
 			}
 		} else {
 			queryData = {
-				pageNum: currentPage,
+				pageNum: currentPage + 1,
 				summary: props.keyword
 			}
 		}
@@ -62,17 +63,20 @@ function QuestionContainerComponent(props) {
 		//延时发送请求
 		setTimeout(() => {
 			//获取问题列表
-			getQuestionsApi(queryData, ({data}) => {
-				//若返回列表为空，则将加载状态设置为完成
-				if(data.questionList.length === 0) {
-					setIsCompleted(true)
-				} else {
-					//否则将问题加进列表
-					data.questionList.map(item => questionList.push(item))
-					setQuestionList([...questionList])
-					setCurrentPage(() => data.page + 1)
-				}
-			}, () => { setIsLoading(false) })
+			if(currentPage != -2) {
+				getQuestionsApi(queryData, ({data}) => {
+					//若返回列表为空，则将加载状态设置为完成
+					if(data.questionList.length === 0) {
+						setIsCompleted(true)
+						setCurrentPage(-2)
+					} else {
+						//否则将问题加进列表
+						data.questionList.map(item => questionList.push(item))
+						setQuestionList([...questionList])
+						setCurrentPage(() => data.page)
+					}
+				}, () => { setIsLoading(false) })
+			}
 		}, 500)
 	}
 
@@ -85,10 +89,8 @@ function QuestionContainerComponent(props) {
 	// //添加滚动监听
 	useEffect(() => {
 		if(loadingRef.current) {
-			console.log('进入视野前')
 			const IO = new IntersectionObserver((entity, _) => {
 				if(entity[0].isIntersecting) {
-					console.log('进入视野')
 					addQuestion()
 					IO.unobserve(loadingRef.current)
 				}
@@ -100,7 +102,6 @@ function QuestionContainerComponent(props) {
 				IO.disconnect()
 			}
 		}
-
 	}, [currentPage])
 
 	return (

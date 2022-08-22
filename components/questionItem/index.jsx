@@ -16,12 +16,12 @@ function QuestionItemComponent(props) {
 		<div className={styles['question-item-container']}>
 			<p className={styles['question-item-title']} onClick={() => { detailTo(props.question.questionID) }}>{props.question.title}</p>
 			<section className={styles['question-item-content']} onClick={() => { detailTo(props.question.questionID) }}>
-				<div className={styles['question-item-summary']}>{props.question.summary}</div>
+				<div className={styles['question-item-summary']} dangerouslySetInnerHTML={{__html: props.question.summary}}></div>
 				<div className={styles['question-item-cover']}>
 					{
 						props.question.cover
 						?
-						<img alt="图片已损坏" src={props.question.cover}/>
+						<img alt="图片已损坏" src={'/api/uploadFile/compressed/' + props.question.cover}/>
 						:
 						''
 					}
@@ -40,7 +40,7 @@ function QuestionItemComponent(props) {
 					</ul>
 				</span>
 				<div className={styles['question-item-publisher']}>
-					<img alt="" src={props.question.publisher.avatar}/>
+					<img alt="" src={'/api/uploadFile/compressed/' + props.question.publisher.avatar}/>
 					<span>{props.question.publisher.nickName}</span>
 				</div>
 			</section>

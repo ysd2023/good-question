@@ -66,7 +66,7 @@ function CommentAreaComponent(props) {
 				setIsWriting(false)
 			})
 		}
-	})
+	}, [isWriting])
 
 	//定义完成状态
 	const [isCompleted, setIsCompleted] = useState(false)
@@ -91,7 +91,7 @@ function CommentAreaComponent(props) {
 	const publishComment = () => {
 		//若评论内容不为空，则允许发布
 		if (commentContent !== '') {
-			publishCommentApi({ content: commentContent, replyTarget: replyTarget.slice(1) }, (res) => {
+			publishCommentApi({ content: commentContent, replyTarget: replyTarget.slice(1), solutionID: props.solutionID }, (res) => {
 				//请求成功
 				if (res.data.statu) {
 					notify({ title: '评论成功', type: 'success' })
@@ -118,7 +118,7 @@ function CommentAreaComponent(props) {
 							commentList.map(item => (
 								<li key={item.cid} onClick={() => replyEditor('@' + item.commentor.nickName)}>
 									<div className={styles['commentor-container']}>
-										<span className={styles['commentor-avatar']}><img alt="图片已损坏" src={item.commentor.avatar} /></span>
+										<span className={styles['commentor-avatar']}><img alt="图片已损坏" src={'/api/uploadFile/compressed/' + item.commentor.avatar} /></span>
 										<span>{item.commentor.nickName}</span>
 									</div>
 									<span>{`${item.replyTarget ? ('@' + item.replyTarget) : ''}`}:</span>

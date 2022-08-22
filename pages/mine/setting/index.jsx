@@ -19,7 +19,7 @@ function MineSettingPage(props) {
 	const imageRef = useRef()
 
 	//定义头像链接
-	const [imageUrl, setImageUrl] = useState(props.userInfo.avatar)
+	const [imageUrl, setImageUrl] = useState('/api/uploadFile/compressed/' + props.userInfo.avatar)
 
 	//定义昵称
 	const [nickName, setNickName] = useState(props.userInfo.nickName)
@@ -34,10 +34,10 @@ function MineSettingPage(props) {
 	const updateImage = () => {
 		let result = confirm('确实要更换头像吗？')
 		if(result) {
-			updateUserApi({avatar: imageRef.current.files[0], nickName: null}, (res) => {
+			updateUserApi({avatar: imageRef.current.files[0]}, (res) => {
 				if(res.data.statu) setImageUrl(window.URL.createObjectURL(imageRef.current.files[0]))
 				else { notify({title: res.data.reason, type: 'error'}) }
-			})
+			}, (err) => {notify({title: '网络错误', type: 'error'})})
 		}
 	}
 
@@ -46,13 +46,13 @@ function MineSettingPage(props) {
 		if(nickName !== currentNickName) {
 			let result = confirm('确实要更换昵称吗？')
 			if(result) {
-				updateUserApi({avatar: null, nickName}, (res) => {
+				updateUserApi({nickName}, (res) => {
 					if(res.data.statu) setCurrentNickName(nickName)
 					else { 
 						setNickName(currentNickName)
 						notify({title: res.data.reason, type: 'error'}) 
 					}
-				})
+				}, (err) => {notify({title: '网络错误', type: 'error'})})
 			} else {
 				setNickName(currentNickName)
 			}
@@ -177,7 +177,12 @@ export async function getServerSideProps(context) {
 
 	//获取个人信息
 	let userInfo = null
-	const resUserInfo = await axios.get('/api/userInfo')
+	const resUserInfo = await axios({
+		method: 'get',
+		url: '/api/userInfo',
+		headers: { cookie: context.req.headers.cookie }
+	})
+
 	if(resUserInfo.data) {
 		userInfo = resUserInfo.data
 	}

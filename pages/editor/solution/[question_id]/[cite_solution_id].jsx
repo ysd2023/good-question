@@ -89,7 +89,7 @@ function EditorSolutionCitePage(props) {
 		//先上传图片，将图片转换成url
 		imageList.map(image => {
 			let formData = new FormData()
-			formData.append('upload-image', image.file)
+			formData.append('uploadImage', image.file)
 			imagePromise.push(new Promise((resolve) => {
 				uploadImageApi(formData, (res) => {
 					resolve(res.data)
@@ -101,19 +101,24 @@ function EditorSolutionCitePage(props) {
 			let uploadSuccessImageNum = res.filter(item => item.errno === 0).length
 			setProgress(9)
 			setTimeout(() => {
-				let finalContent = textContent
-				res.map(image => {
-					if (image.errno === 0) {
-						finalContent += `<img alt="图片已损坏" src="${image.data.url}" alt="${image.data.alt}"/>`
+				//图片若上传成功则返回url
+				let imageSet = res.map(image => {
+					if(image.errno === 0) {
+						return image.data.url
 					} else {
-						finalContent += '<img alt="图片已损坏" src="#####" alt="图片损坏"/>'
+						return '####'
 					}
 				})
+				let finalContent = JSON.stringify({
+					plainText: textContent,
+					imageSet
+				})
+				console.log(finalContent)
 				setFinalContents(finalContent)
 				setProgress(9 + uploadSuccessImageNum * 9)
 				//延迟上传
 				setTimeout(() => {
-					publishSolutionApi({ citeSolutionID: props.cite_solution_id, content: finalContent }, (res) => {
+					publishSolutionApi({ citeSolutionID: props.cite_solution_id, content: finalContent, questionID: props.question_id }, (res) => {
 						//若发布成功
 						if (res.data.statu) {
 							setProgress(100)
@@ -135,7 +140,7 @@ function EditorSolutionCitePage(props) {
 		setPublishStatus('normal')
 		//延迟上传
 		setTimeout(() => {
-			publishSolutionApi({ citeSolutionID: props.cite_solution_id, content: finalContents }, (res) => {
+			publishSolutionApi({ citeSolutionID: props.cite_solution_id, content: finalContents, questionID: props.question_id }, (res) => {
 				//若发布成功
 				if (res.data.statu) {
 					setProgress(100)
@@ -163,10 +168,10 @@ function EditorSolutionCitePage(props) {
 			</Head>
 			<div className={styles['question-container']}>
 				<h3>{props.question.title}</h3>
-				<p>{props.question.summary}</p>
+				<div dangerouslySetInnerHTML={{ __html: props.question.summary }}></div>
 				<section>
 					<span>引用：</span>
-					“{props.solution.content}”
+					<div dangerouslySetInnerHTML={{ __html: JSON.parse(props.solution.content).plainText }}></div>
 				</section>
 			</div>
 			<div className={styles['editor-container']}>
@@ -262,7 +267,7 @@ export async function getServerSideProps(context) {
 
 	//获取引用解决方案
 	let resSolution = await axios.get(`/api/getSolution?questionID=${question_id}`)
-	let solution = resSolution.data.solutionList[0].solution
+	let solution = resSolution.data.solutionList[0]
 
 	return {
 		props: {
