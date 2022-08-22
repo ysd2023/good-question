@@ -190,7 +190,7 @@ function QuestionDetailPage(props) {
 					</div>
 					:
 					<div>
-						{Array.from(new Array(10).keys()).map(item => <br />)}
+						{Array.from(new Array(10).keys()).map(item => <br key={item}/>)}
 					</div>
 			}
 			<button className={styles['dock-btn']} onClick={() => setIsDockOpen(!isDockOpen)}>
@@ -221,7 +221,7 @@ function QuestionDetailPage(props) {
 					</div>
 					:
 					<div>
-						{Array.from(new Array(10).keys()).map(item => <br />)}
+						{Array.from(new Array(10).keys()).map(item => <br key={item}/>)}
 					</div>
 			}
 			<footer className={styles['question-detail-footer']}>

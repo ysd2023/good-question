@@ -35,7 +35,7 @@ function QuestionItemComponent(props) {
 					</i>
 					<ul className={styles['question-item-tag-container']}>
 						{
-							props.question.tag.map(item => <li>{item}</li>)
+							props.question.tag.map(item => <li key={item}>{item}</li>)
 						}
 					</ul>
 				</span>
