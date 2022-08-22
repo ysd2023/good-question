@@ -8,6 +8,7 @@ import com.dongliu.goodquestion.entity.User;
 import com.dongliu.goodquestion.dao.mapper.QuestionMapper;
 import com.dongliu.goodquestion.dao.mapper.SolutionMapper;
 import com.dongliu.goodquestion.dao.mapper.UserMapper;
+import com.dongliu.goodquestion.service.IndexService.IndexService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

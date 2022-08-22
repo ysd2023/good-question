@@ -1,4 +1,4 @@
-package com.dongliu.goodquestion.service;
+package com.dongliu.goodquestion.service.IndexService;
 
 import com.dongliu.goodquestion.entity.*;
 import org.springframework.web.multipart.MultipartFile;

@@ -2,7 +2,7 @@ package com.dongliu.goodquestion.controller;
 
 import com.dongliu.goodquestion.Util.ResultUtil;
 import com.dongliu.goodquestion.entity.*;
-import com.dongliu.goodquestion.service.IndexService;
+import com.dongliu.goodquestion.service.IndexService.IndexService;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

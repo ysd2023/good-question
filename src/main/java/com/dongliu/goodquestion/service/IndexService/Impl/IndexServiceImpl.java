@@ -1,10 +1,11 @@
-package com.dongliu.goodquestion.service;
+package com.dongliu.goodquestion.service.IndexService.Impl;
 
 import com.dongliu.goodquestion.Util.UploagFile;
 import com.dongliu.goodquestion.dao.ealsticsearch.QuestionDao;
 import com.dongliu.goodquestion.dao.ealsticsearch.SolutionDao;
 import com.dongliu.goodquestion.entity.*;
 import com.dongliu.goodquestion.dao.mapper.*;
+import com.dongliu.goodquestion.service.IndexService.IndexService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class IndexServiceImpl implements IndexService{
+public class IndexServiceImpl implements IndexService {
 
     @Value("${suggestNum}")
     private int SUGGESTNUM;
