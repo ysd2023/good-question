@@ -390,3 +390,42 @@
 
 
 
+### 十二、Notification
+
+#### 1.组件功能
+
+该组件提供消息通知显示的功能，且非标签类组件，而是函数方法；更多自定义可查看组件。
+
+#### 2. 依赖关系
+
+无。
+
+#### 3.提供的属性或接口
+
+- notification`<object>`
+
+  组件接收一个对象作为参数，可提供的内容有：
+
+  ```
+  {
+      title: String //通知的标题
+      message: String //通知的内容
+      type: String //通知展示的类型，有success, error, warning可选，默认为default
+      delay: Number //通知存在持续时间, 默认存在3s, 以ms为单位
+  }
+  ```
+
+  示例：
+
+  ```javascript
+   import notify from '/components/notification'
+  
+  notify({
+      title: '通知',
+      message: '这是一则消息',
+      type: 'default',
+      delay: 1000 //1s为1000ms
+  })
+  ```
+
+  
