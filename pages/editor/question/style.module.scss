@@ -1,9 +1,7 @@
 .btn-image-upload {
-	position: fixed;
+	position: relative;
 	height: 3rem;
 	width: 3rem;
-	right: 5%;
-	bottom: 10%;
 	border-radius: 50%;
 	border: none;
 	outline: none;
@@ -126,12 +124,16 @@
 	visibility: hidden;
 }
 
-.btn-publish {
+.btn-sidebar {
 	position: fixed;
+	right: 5%;
+	bottom: 10%;
+	z-index: 3;
+}
+
+.btn-publish {
 	height: 3rem;
 	width: 3rem;
-	right: 5%;
-	bottom: 20%;
 	border-radius: 50%;
 	border: none;
 	outline: none;
